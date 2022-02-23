@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NFT Minting Dapp</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://unpkg.com/moralis/dist/moralis.js"></script>
+  </head>
+  <body>
+    <div>
+      <button onclick="login()">Connect Wallet</button>
+    </div>
+  </body>
+
+  <script>
+    const serverUrl = "https://g3tehlmnvfjn.usemoralis.com:2053/server";
+    const appId = "IxPDpQoised9oaiDBBkOjTzfJiwS076bhIGhmpai";
+    const signUnpMessage = "Hello Web3";
+    Moralis.start({
+      serverUrl,
+      appId,
+    });
+    function login() {
+      Moralis.authenticate().then(async (user) => {
+        let response = await fetch("./backend/abis/CustomNFTContract.json");
+        let Contract = await response.json();
+        if (!window.ethereum) {
+          if (!Moralis.provider) {
+            await Moralis.enableWeb3({ provider: "walletconnect" });
+          }
+        } else {
+          if (!Moralis.provider) {
+            await Moralis.enableWeb3();
+          }
+        }
+        const web3Now = new Web3(Moralis.provider);
+        let accounts = await web3Now.eth.getAccounts();
+        let tokenContract = new web3Now.eth.Contract(Contract.abi);
+        tokenContract
+          .deploy({
+            data: Contract.bytecode,
+            arguments: ["Live Better", "LVB"],
+          })
+          .send(
+            {
+              from: accounts[0],
+            },
+            function (error, transactionHash) {
+              //
+            }
+          )
+          .on("error", function (error) {
+            console.log(error);
+          })
+          .on("transactionHash", function (transactionHash) {})
+          .on("receipt", function (receipt) {
+            alert("Contract address: " + receipt.contractAddress);
+            console.log(receipt.contractAddress); // contains the new contract address
+          });
+      });
+    }
+  </script>
+</html>

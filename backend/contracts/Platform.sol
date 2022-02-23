@@ -10,13 +10,14 @@ contract Platform {
         string contractAddress;
         string status;
         string owner;
+        string description;
     }
 
     TicketCollection[] public collections;
 
-    function addCollection(string memory name, string memory ticker, string memory contractAddress, string memory owner) public {
+    function addCollection(string memory name, string memory ticker, string memory contractAddress, string memory owner, string memory description) public {
         require(msg.sender == address(this));
-        TicketCollection memory newCollection = TicketCollection(COUNTER, name, ticker, contractAddress, "active", owner);
+        TicketCollection memory newCollection = TicketCollection(COUNTER, name, ticker, contractAddress, "active", owner, description);
         collections.push(newCollection);
         COUNTER++;
     }
