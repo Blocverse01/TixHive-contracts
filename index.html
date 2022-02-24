@@ -21,7 +21,7 @@
     });
     function login() {
       Moralis.authenticate().then(async (user) => {
-        let response = await fetch("./backend/abis/CustomNFTContract.json");
+        let response = await fetch("./backend/abis/BasicTicketCollection.json");
         let Contract = await response.json();
         if (!window.ethereum) {
           if (!Moralis.provider) {
@@ -38,7 +38,7 @@
         tokenContract
           .deploy({
             data: Contract.bytecode,
-            arguments: ["Blocverse Bootcamp Tickets", "BBT"],
+            arguments: ["Blocverse Booty Tickets", "BBoobsT", [{label: 'VIP', price: 100}, {label: 'regular', price: 50}, {label: 'premium', price: 200}]],
           })
           .send(
             {
