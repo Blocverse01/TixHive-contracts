@@ -21,7 +21,7 @@
     });
     function login() {
       Moralis.authenticate().then(async (user) => {
-        let response = await fetch("./backend/abis/BasicTicketCollection.json");
+        let response = await fetch("./backend/abis/Event.json");
         let Contract = await response.json();
         if (!window.ethereum) {
           if (!Moralis.provider) {
@@ -34,11 +34,21 @@
         }
         const web3Now = new Web3(Moralis.provider);
         let accounts = await web3Now.eth.getAccounts();
-        let tokenContract = new web3Now.eth.Contract(Contract.abi);
+        let tokenContract = new web3Now.eth.Contract(Contract.abi)
+        let netId = 80001;
         tokenContract
           .deploy({
             data: Contract.bytecode,
-            arguments: ["Blocverse Booty Tickets", "BBoobsT", [{label: 'VIP', price: 100}, {label: 'regular', price: 50}, {label: 'premium', price: 200}]],
+            arguments: [
+              "Success Eagle Conference 😂",
+              "SEEC or SICK",
+              netId,
+              [
+                { name: "VIP", description: "Ticket for the superbosses", ticket_type: "paid", quantity_available: 20, max_per_order: 10, price: 5000 },
+                { name: "Regular", description: "Ticket for the masses", ticket_type: "cheap", quantity_available: 1000, max_per_order: 10, price: 50 },
+                { name: "Premium", description: "Ticket for the bosses", ticket_type: "free", quantity_available: 200, max_per_order: 10, price: 500 },
+              ],
+            ],
           })
           .send(
             {
