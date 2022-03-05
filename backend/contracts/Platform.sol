@@ -3,8 +3,8 @@ pragma solidity >=0.6.0 <0.9.0;
 
 contract Platform {
     uint256 COUNTER;
-    struct TicketCollection{
-        uint256 id; 
+    struct Event {
+        uint256 id;
         string name;
         string ticker;
         string contractAddress;
@@ -13,20 +13,34 @@ contract Platform {
         string description;
     }
 
-    TicketCollection[] public collections;
+    Event[] _events;
 
-    function addCollection(string memory name, string memory ticker, string memory contractAddress, string memory owner, string memory description) public {
+    function addEvent(
+        string memory name,
+        string memory ticker,
+        string memory contractAddress,
+        string memory owner,
+        string memory description
+    ) public {
         require(msg.sender == address(this));
-        TicketCollection memory newCollection = TicketCollection(COUNTER, name, ticker, contractAddress, "active", owner, description);
-        collections.push(newCollection);
+        Event memory newEvent = Event(
+            COUNTER,
+            name,
+            ticker,
+            contractAddress,
+            "active",
+            owner,
+            description
+        );
+        _events.push(newEvent);
         COUNTER++;
     }
 
-    function getCollections() public view returns (TicketCollection[] memory) {
-        return collections;
+    function getEvents() public view returns (Event[] memory) {
+        return _events;
     }
 
-    function getCollection(uint256 _id) public view returns (TicketCollection memory) {
-        return collections[_id];
+    function getEvents(uint256 _id) public view returns (Event memory) {
+        return _events[_id];
     }
 }

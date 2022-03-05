@@ -12,6 +12,7 @@ contract Event is ERC721URIStorage, Ownable {
     uint256 private _network_id;
     string private _visibility;
     string private _cover_image_url;
+    string private _description;
 
     struct Ticket {
         string name;
