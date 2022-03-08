@@ -1847,14 +1847,28 @@
   },
   "networks": {
     "80001": {
-      "events": {},
+      "events": {
+        "0x0227e3b2fb10ea87b3ce0fe9b23554ad992c666dd128c13c0a6ef2d73dd80ba0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "contractAddress",
+              "type": "address"
+            }
+          ],
+          "name": "NewEvent",
+          "type": "event"
+        }
+      },
       "links": {},
-      "address": "0x93A039E68b9dc423Bc02a3057CFC156625B1b5b1",
-      "transactionHash": "0xb422174fc97514ae69f6490562781ece1e3a172749a3e51fe3c3f10b7f968f08"
+      "address": "0x013e953D354580Fc895Ea8cAbB9F5E43F39F3288",
+      "transactionHash": "0xc2acdfa40b643c583662fa0c72bca15772e073d05ad3fc34dbaa96c5f3a701bc"
     }
   },
   "schemaVersion": "3.4.5",
-  "updatedAt": "2022-03-08T13:08:16.184Z",
+  "updatedAt": "2022-03-08T14:56:57.879Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

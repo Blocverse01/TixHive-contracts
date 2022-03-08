@@ -21,8 +21,10 @@
     });
     function login() {
       Moralis.authenticate().then(async (user) => {
-        let response = await fetch("./backend/abis/Platform.json");
+        let response = await fetch("./backend/abis/EventFactory.json");
+        let eventObject = await fetch("./backend/abis/Event.json");
         let Contract = await response.json();
+        let EventContract = await eventObject.json();
         if (!window.ethereum) {
           if (!Moralis.provider) {
             await Moralis.enableWeb3({ provider: "walletconnect" });
@@ -34,15 +36,30 @@
         }
         const web3Now = new Web3(Moralis.provider);
         let accounts = await web3Now.eth.getAccounts();
-        let tokenContract = new web3Now.eth.Contract(Contract.abi, "0x6cA565b71bC3DE89f57BF729b7aA4835978f1786");
+        let eventFactory = "0x733594a67F395D5cE77a2C3B1eE48FD6DfB7C5F9"
+        let tokenContract = new web3Now.eth.Contract(Contract.abi, eventFactory);
         let netId = 80001;
+        let events = await tokenContract.methods.allEvents().call();
+        let eventX = new web3Now.eth.Contract(EventContract.abi, events[0]);
+        eventData = await eventX?.methods._eventData().call();
+        console.log(EventContract.abi, events[0], eventData.name);
         tokenContract
-          .methods.addEvent("Test Event", "TeeV", "Tech Hub Nigeria", netId,  [
-                { name: "VIP", description: "Ticket for the superbosses", ticket_type: "paid", quantity_available: 20, max_per_order: 10, price: 5000 },
-                { name: "Regular", description: "Ticket for the masses", ticket_type: "cheap", quantity_available: 1000, max_per_order: 10, price: 50 },
-                { name: "Premium", description: "Ticket for the bosses", ticket_type: "free", quantity_available: 200, max_per_order: 10, price: 500 },
-              ],  (new Date()).getTime(), 
-              "Tech event", "Sample event for tech newbies", "public", "https://bloctick.netlify.app/static/media/pexels-teddy-yang-2263436.3014268c99d59a7520a4.jpg")
+          .methods.addEvent({
+            name: "Test Event",
+            ticker: "Teev",
+            host_name: "Tech Hub Nigeria", 
+            networkId: netId, 
+            event_time: (new Date()).getTime(),
+            category: "Tech event",
+            description:  "Sample event for tech newbies",
+            visibility:1,
+            cover_image_url: "https://bloctick.netlify.app/static/media/pexels-teddy-yang-2263436.3014268c99d59a7520a4.jpg" 
+          }, [
+                { name: "VIP", description: "Ticket for the superbosses", ticket_type: 0, quantity_available: 20, max_per_order: 10, price: 5000 },
+                { name: "Regular", description: "Ticket for the masses", ticket_type: 3, quantity_available: 1000, max_per_order: 10, price: 50 },
+                { name: "Premium", description: "Ticket for the bosses", ticket_type: 1, quantity_available: 200, max_per_order: 10, price: 500 },
+                { name: "Donation Ticket", description: "Ticket for benefactors", ticket_type: 2, quantity_available: 100, max_per_order: 10, price: 5 },
+              ])
           .send(
             {
               from: accounts[0],
@@ -56,8 +73,7 @@
           })
           .on("transactionHash", function (transactionHash) {})
           .on("receipt", function (receipt) {
-            alert("Contract address: " + receipt.contractAddress);
-            console.log(receipt.contractAddress); // contains the new contract address
+            console.log(receipt); // contains the new contract address
           });
       });
     }

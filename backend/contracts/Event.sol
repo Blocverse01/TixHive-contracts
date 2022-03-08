@@ -35,7 +35,6 @@ contract Event is ERC721URIStorage {
     ) ERC721(name, ticker) {
         _factory = msg.sender;
         _owner = __owner;
-        emit BlocTick.NewEvent(address(this));
     }
 
     function _trade(uint256 _id, address __owner) internal {
@@ -64,6 +63,10 @@ contract Event is ERC721URIStorage {
             _trade(_tokenId, purchase.owner);
             COUNTER++;
         }
+    }
+
+    function setEventData(BlocTick.EventData memory eventData) external {
+        _eventData = eventData;
     }
 
     function _getTotalCost(BlocTick.TicketPurchase[] memory purchases)
@@ -131,6 +134,9 @@ contract Event is ERC721URIStorage {
                 balanceOf(caller)
             );
         uint256 counter = 0;
+        if (balanceOf(caller) == 0) {
+            return result;
+        }
         for (uint256 i = 0; i <= COUNTER; i++) {
             if (ownerOf(i) == caller) {
                 result[counter] = _sales[i];
