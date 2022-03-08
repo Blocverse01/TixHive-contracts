@@ -106,14 +106,14 @@ module.exports = {
       confirmations: 10,
       timeoutBlocks: 3000,
       skipDryRun: true
-
     },
-    plugins: [
-      'truffle-plugin-verify'
-    ],
-    api_keys: {
-      etherscan: process.env.ETHERSCAN_API_KEY
-    },
+  },
+  plugins: [
+    'truffle-plugin-verify',
+    'truffle-contract-size'
+  ],
+  api_keys: {
+    etherscan: process.env.ETHERSCAN_API_KEY
   },
   contracts_directory: './backend/contracts/',
   contracts_build_directory: './backend/abis/',

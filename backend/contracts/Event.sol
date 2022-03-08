@@ -2,130 +2,105 @@
 pragma solidity >=0.6.0 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "./BlocTick.sol";
 
-contract Event is ERC721URIStorage, Ownable {
-    address public _owner;
+contract Event is ERC721URIStorage {
     uint256 private COUNTER;
-    string private _category;
-    uint256 private _network_id;
-    string private _visibility;
-    string private _cover_image_url;
-    string private _description;
+    address public _owner;
+    uint256 public _created_at;
+    string public _status;
+    address private _factory;
+    uint256 FREE_TICKET = 0;
+    uint256 PAID_TICKET = 1;
+    uint256 DONATION_TICKET = 2;
+    BlocTick.Ticket[] public _tickets;
+    BlocTick.SuccessfulPurchase[] public _sales;
+    BlocTick.EventData public _eventData;
 
-    struct Ticket {
-        string name;
-        string description;
-        string ticket_type;
-        uint256 quantity_available;
-        uint256 max_per_order;
-        uint256 price;
+    modifier onlyFactory() {
+        require(msg.sender == _factory, "You need to use the factory");
+        _;
     }
-    Ticket[] private _tickets;
-    struct TicketPurchase {
-        uint256 ticketId;
-        string tokenURI;
-        address owner;
+
+    modifier onlyEventCreator(address caller) {
+        require(caller == _owner, "Access restricted!");
+        _;
     }
-    struct SuccessfulPurchase {
-        uint256 id;
-        address owner;
-        uint256 ticketId;
-    }
-    SuccessfulPurchase[] _sales;
 
     constructor(
-        string memory _name,
-        string memory _ticker,
-        uint256 _networkId,
-        Ticket[] memory tickets
-    ) ERC721(_name, _ticker) {
-        _owner = msg.sender;
-        _network_id = _networkId;
-        storeTickets(tickets);
+        string memory name,
+        string memory ticker,
+        address __owner
+    ) ERC721(name, ticker) {
+        _factory = msg.sender;
+        _owner = __owner;
+        emit BlocTick.NewEvent(address(this));
     }
 
-    function _trade(uint256 _id, address owner) internal {
-        _transfer(address(this), owner, _id); //nft to user
+    function _trade(uint256 _id, address __owner) internal {
+        _transfer(address(this), __owner, _id); //nft to user
     }
 
-    function mint(TicketPurchase[] memory purchases) public payable {
-        uint256 totalCost = _getTotalCost(purchases);
-        require(msg.value >= totalCost, "The tickets cost more");
+    function mint(BlocTick.TicketPurchase[] memory purchases)
+        external
+        payable
+        onlyFactory
+    {
+        require(msg.value >= _getTotalCost(purchases), "The tickets cost more");
         for (uint256 i = 0; i < purchases.length; i++) {
-            TicketPurchase memory purchase = purchases[i];
+            BlocTick.TicketPurchase memory purchase = purchases[i];
             uint256 _tokenId = COUNTER;
             _mint(address(this), _tokenId);
             _setTokenURI(_tokenId, purchase.tokenURI);
-            SuccessfulPurchase memory sale = SuccessfulPurchase(
-                _tokenId,
-                purchase.owner,
-                purchase.ticketId
+            _sales.push(
+                BlocTick.SuccessfulPurchase(
+                    _tokenId,
+                    purchase.owner,
+                    purchase.ticketId
+                )
             );
-            _sales.push(sale);
             _validate(_tokenId);
             _trade(_tokenId, purchase.owner);
             COUNTER++;
         }
-        payable(_owner).transfer(msg.value); //eth to owner
     }
 
-    function category() public view returns (string memory) {
-        return _category;
-    }
-
-    function network() public view returns (uint256) {
-        return _network_id;
-    }
-
-    function visibility() public view returns (string memory) {
-        return _visibility;
-    }
-
-    function cover_image_url() public view returns (string memory) {
-        return _cover_image_url;
-    }
-
-    function created_tickets() public view returns (Ticket[] memory) {
-        return _tickets;
-    }
-
-    function _getTotalCost(TicketPurchase[] memory purchases)
+    function _getTotalCost(BlocTick.TicketPurchase[] memory purchases)
         internal
         view
         returns (uint256)
     {
         uint256 total = 0;
         for (uint256 i = 0; i < purchases.length; i++) {
-            Ticket memory ticket = _tickets[purchases[i].ticketId];
+            BlocTick.Ticket memory ticket = _tickets[purchases[i].ticketId];
+            if (ticket.ticket_type == DONATION_TICKET) {
+                continue;
+            }
             total += ticket.price;
         }
         return total;
     }
 
-    function storeTickets(Ticket[] memory tickets) public {
+    function storeTickets(BlocTick.Ticket[] memory tickets, address caller)
+        external
+        onlyFactory
+        onlyEventCreator(caller)
+    {
         for (uint256 i = 0; i < tickets.length; i++) {
-            Ticket memory ticket = tickets[i];
-
-            bool isNotPaid = keccak256(abi.encodePacked(ticket.ticket_type)) !=
-                keccak256(abi.encodePacked("paid"));
-            bool isNotFree = keccak256(abi.encodePacked(ticket.ticket_type)) !=
-                keccak256(abi.encodePacked("free"));
-
-            if (isNotFree && isNotPaid) {
-                ticket.ticket_type = "free";
-            }
-
+            BlocTick.Ticket memory ticket = tickets[i];
             if (
-                keccak256(abi.encodePacked(ticket.ticket_type)) ==
-                keccak256(abi.encodePacked("free"))
+                ticket.ticket_type != FREE_TICKET &&
+                ticket.ticket_type != PAID_TICKET &&
+                ticket.ticket_type != DONATION_TICKET
             ) {
+                ticket.ticket_type = FREE_TICKET;
+            }
+            if (ticket.ticket_type == FREE_TICKET) {
                 ticket.price = 0;
             }
-
             _tickets.push(
-                Ticket(
+                BlocTick.Ticket(
                     ticket.name,
                     ticket.description,
                     ticket.ticket_type,
@@ -137,22 +112,27 @@ contract Event is ERC721URIStorage, Ownable {
         }
     }
 
+    function setStatus(string memory __status) external onlyFactory {
+        _status = __status;
+    }
+
     function _validate(uint256 _id) internal view returns (bool) {
         require(_exists(_id), "Error, wrong Token id");
         return true;
     }
 
-    function getTicketsForAddress(address _address)
-        public
+    function getMyTickets(address caller)
+        external
         view
-        returns (SuccessfulPurchase[] memory)
+        returns (BlocTick.SuccessfulPurchase[] memory)
     {
-        SuccessfulPurchase[] memory result = new SuccessfulPurchase[](
-            balanceOf(_address)
-        );
+        BlocTick.SuccessfulPurchase[]
+            memory result = new BlocTick.SuccessfulPurchase[](
+                balanceOf(caller)
+            );
         uint256 counter = 0;
-        for (uint256 i = 0; i < _sales.length; i++) {
-            if (ownerOf(i) == _address) {
+        for (uint256 i = 0; i <= COUNTER; i++) {
+            if (ownerOf(i) == caller) {
                 result[counter] = _sales[i];
                 counter++;
             }

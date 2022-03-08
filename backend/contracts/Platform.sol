@@ -1,46 +1,35 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.6.0 <0.9.0;
 
-contract Platform {
-    uint256 COUNTER;
-    struct Event {
-        uint256 id;
-        string name;
-        string ticker;
-        string contractAddress;
-        string status;
-        string owner;
-        string description;
+import "./EventFactory.sol";
+import "./Administrator.sol";
+
+contract Platform is Administrator {
+    uint256 platform_percent = 10;
+
+    constructor() {
+        _owner = msg.sender;
     }
 
-    Event[] _events;
-
-    function addEvent(
-        string memory name,
-        string memory ticker,
-        string memory contractAddress,
-        string memory owner,
-        string memory description
-    ) public {
-        require(msg.sender == address(this));
-        Event memory newEvent = Event(
-            COUNTER,
-            name,
-            ticker,
-            contractAddress,
-            "active",
-            owner,
-            description
-        );
-        _events.push(newEvent);
-        COUNTER++;
+    function mintTickets(
+        address eventContract,
+        BlocTick.TicketPurchase[] memory purchases
+    ) external payable {
+        Event e = Event(eventContract);
+        e.mint(purchases);
+        uint256 platform_fee = (platform_percent / 100) * msg.value;
+        payable(e._owner()).transfer(msg.value - platform_fee);
+        payable(_owner).transfer(platform_fee);
     }
 
-    function getEvents() public view returns (Event[] memory) {
-        return _events;
+    function setPlatformPercent(uint256 fee) external onlyAdministrator {
+        platform_percent = fee;
     }
 
-    function getEvents(uint256 _id) public view returns (Event memory) {
-        return _events[_id];
+    function setEventStatus(address eventContract, string memory status)
+        external
+        onlyAdministrator
+    {
+        Event(eventContract).setStatus(status);
     }
 }
