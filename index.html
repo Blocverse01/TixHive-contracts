@@ -8,6 +8,7 @@
   <body>
     <div>
       <button onclick="login()">Connect Wallet</button>
+      <button onclick="testAbi()">Test ABI</button>
     </div>
   </body>
 
@@ -19,6 +20,17 @@
       serverUrl,
       appId,
     });
+    function testAbi() {
+      Moralis.authenticate().then(async () => { 
+        let response = await fetch("./test.json");
+        let Contract = await response.json();
+        if (!Moralis.provider) {
+          await Moralis.enableWeb3();
+        }
+        const web3Now = new Web3(Moralis.provider);
+        console.log(new web3Now.eth.Contract(Contract, ""));
+      }); 
+    }
     function login() {
       Moralis.authenticate().then(async (user) => {
         let response = await fetch("./backend/abis/EventFactory.json");
@@ -42,7 +54,7 @@
         let events = await tokenContract.methods.allEvents().call();
         let eventX = new web3Now.eth.Contract(EventContract.abi, events[0]);
         eventData = await eventX?.methods._eventData().call();
-        console.log(EventContract.abi, events[0], eventData.name);
+        console.log(EventContract.abi, events[0], eventData.name, eventX);
         tokenContract
           .methods.addEvent({
             name: "Test Event",
