@@ -2,13 +2,14 @@
 pragma solidity >=0.6.0 <0.9.0;
 
 import "./Event.sol";
-import "./Administrator.sol";
 
-contract EventFactory is Administrator {
+contract EventFactory {
     Event[] public _events;
     uint256 EVENT_COUNTER;
-    uint256 public_event = 1;
-    uint256 private_event = 0;
+    enum EventVisibility {
+        Private,
+        Public
+    }
 
     function allEvents() public view returns (Event[] memory) {
         return _events;
@@ -19,10 +20,10 @@ contract EventFactory is Administrator {
         BlocTick.Ticket[] memory tickets
     ) external returns (Event) {
         if (
-            eventData.visibility != private_event &&
-            eventData.visibility != public_event
+            eventData.visibility != EventVisibility.Private &&
+            eventData.visibility != EventVisibility.Public
         ) {
-            eventData.visibility = public_event;
+            eventData.visibility = EventVisibility.Public;
         }
         Event e = new Event(eventData.name, eventData.ticker, msg.sender);
         e.storeTickets(tickets, msg.sender);

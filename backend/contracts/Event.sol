@@ -6,14 +6,12 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "./BlocTick.sol";
 
 contract Event is ERC721URIStorage {
+    using TicketType for BlocTick.TicketType;
     uint256 private COUNTER;
     address public _owner;
     uint256 public _created_at;
     string public _status;
     address private _factory;
-    uint256 FREE_TICKET = 0;
-    uint256 PAID_TICKET = 1;
-    uint256 DONATION_TICKET = 2;
     BlocTick.Ticket[] public _tickets;
     BlocTick.SuccessfulPurchase[] public _sales;
     BlocTick.EventData public _eventData;
@@ -77,7 +75,7 @@ contract Event is ERC721URIStorage {
         uint256 total = 0;
         for (uint256 i = 0; i < purchases.length; i++) {
             BlocTick.Ticket memory ticket = _tickets[purchases[i].ticketId];
-            if (ticket.ticket_type == DONATION_TICKET) {
+            if (ticket.ticket_type == TicketType.Donation) {
                 continue;
             }
             total += ticket.price;
@@ -93,13 +91,13 @@ contract Event is ERC721URIStorage {
         for (uint256 i = 0; i < tickets.length; i++) {
             BlocTick.Ticket memory ticket = tickets[i];
             if (
-                ticket.ticket_type != FREE_TICKET &&
+                ticket.ticket_type != TicketType.Free &&
                 ticket.ticket_type != PAID_TICKET &&
                 ticket.ticket_type != DONATION_TICKET
             ) {
-                ticket.ticket_type = FREE_TICKET;
+                ticket.ticket_type = TicketType.Free;
             }
-            if (ticket.ticket_type == FREE_TICKET) {
+            if (ticket.ticket_type == TicketType.Free) {
                 ticket.price = 0;
             }
             _tickets.push(

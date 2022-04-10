@@ -31,6 +31,7 @@
         console.log(new web3Now.eth.Contract(Contract, ""));
       }); 
     }
+    
     function login() {
       Moralis.authenticate().then(async (user) => {
         let response = await fetch("./backend/abis/EventFactory.json");

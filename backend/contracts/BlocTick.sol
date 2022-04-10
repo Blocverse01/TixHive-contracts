@@ -6,17 +6,19 @@ library BlocTick {
         string name;
         string ticker;
         string host_name;
-        uint256 networkId;
-        uint256 event_time;
+        string starts_on;
+        string ends_on;
         string category;
         string description;
         uint256 visibility;
+        VenueType venue_type;
+        string venue;
         string cover_image_url;
     }
     struct Ticket {
         string name;
         string description;
-        uint256 ticket_type;
+        TicketType ticket_type;
         uint256 quantity_available;
         uint256 max_per_order;
         uint256 price;
@@ -35,5 +37,14 @@ library BlocTick {
     modifier restrictedTo(address _owner, string memory message) {
         require(msg.sender == _owner, message);
         _;
+    }
+    enum VenueType {
+        Physical,
+        Virtual
+    }
+    enum TicketType {
+        Free,
+        Paid,
+        Donation
     }
 }
