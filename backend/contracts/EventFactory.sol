@@ -5,7 +5,6 @@ import "./Event.sol";
 
 contract EventFactory {
     Event[] public _events;
-    uint256 EVENT_COUNTER;
 
     function allEvents() public view returns (Event[] memory) {
         return _events;

@@ -3,17 +3,19 @@ pragma solidity >=0.6.0 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "./BlocTick.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "../library/TicketManager.sol";
 
 contract Event is ERC721URIStorage {
-    uint256 private COUNTER;
+    using Counters for Counters.Counter;
+    using TicketManager for TicketManager.Manager;
+    Counters.Counter tokenCounter;
+    TicketManager.Manager ticketManager;
     address public _owner;
     uint256 public _created_at;
     string public _status;
     address private _factory;
-    BlocTick.Ticket[] public _tickets;
-    mapping(uint256 => BlocTick.SuccessfulPurchase) public _sales;
-    BlocTick.EventData public _eventData;
+    BlocTick.EventData _eventData;
 
     modifier onlyFactory() {
         require(msg.sender == _factory, "You need to use the factory");
@@ -43,22 +45,25 @@ contract Event is ERC721URIStorage {
         payable
         onlyFactory
     {
-        require(msg.value >= _getTotalCost(purchases), "The tickets cost more");
+        require(
+            msg.value >= ticketManager._getTotalCost(purchases),
+            "The tickets cost more"
+        );
         for (uint256 i = 0; i < purchases.length; i++) {
             BlocTick.TicketPurchase memory purchase = purchases[i];
-            uint256 _tokenId = COUNTER;
+            uint256 _tokenId = tokenCounter.current();
             _mint(address(this), _tokenId);
-            COUNTER++;
+            tokenCounter.increment();
             _setTokenURI(_tokenId, purchase.tokenURI);
-            _sales[_tokenId] = BlocTick.SuccessfulPurchase(
+            ticketManager._sales[_tokenId] = BlocTick.SuccessfulPurchase(
                 purchase.purchaseId,
-                purchase.owner,
+                purchase.buyer,
                 _tokenId,
-                _tickets[purchase.ticketId],
+                purchase.ticketId,
                 purchase.cost
             );
             _validate(_tokenId);
-            _trade(_tokenId, purchase.owner);
+            _trade(_tokenId, purchase.buyer);
         }
     }
 
@@ -66,49 +71,12 @@ contract Event is ERC721URIStorage {
         _eventData = eventData;
     }
 
-    function _getTotalCost(BlocTick.TicketPurchase[] memory purchases)
-        internal
-        view
-        returns (uint256)
-    {
-        uint256 total = 0;
-        for (uint256 i = 0; i < purchases.length; i++) {
-            BlocTick.Ticket memory ticket = _tickets[purchases[i].ticketId];
-            if (ticket.ticket_type == BlocTick.TicketType.Donation) {
-                continue;
-            }
-            total += ticket.price;
-        }
-        return total;
-    }
-
     function storeTickets(BlocTick.Ticket[] memory tickets, address caller)
         external
         onlyFactory
         onlyEventCreator(caller)
     {
-        for (uint256 i = 0; i < tickets.length; i++) {
-            BlocTick.Ticket memory ticket = tickets[i];
-            if (
-                ticket.ticket_type < BlocTick.TicketType.Free &&
-                ticket.ticket_type > BlocTick.TicketType.Donation
-            ) {
-                ticket.ticket_type = BlocTick.TicketType.Free;
-            }
-            if (ticket.ticket_type == BlocTick.TicketType.Free) {
-                ticket.price = 0;
-            }
-            _tickets.push(
-                BlocTick.Ticket(
-                    ticket.name,
-                    ticket.description,
-                    ticket.ticket_type,
-                    ticket.quantity_available,
-                    ticket.max_per_order,
-                    ticket.price
-                )
-            );
-        }
+        ticketManager._storeTickets(tickets);
     }
 
     function setStatus(string memory __status) external onlyFactory {
@@ -123,19 +91,15 @@ contract Event is ERC721URIStorage {
     function getMyTickets(address caller)
         external
         view
-        returns (BlocTick.SuccessfulPurchase[] memory)
+        returns (BlocTick.SuccessfulPurchase[] memory result)
     {
-        BlocTick.SuccessfulPurchase[]
-            memory result = new BlocTick.SuccessfulPurchase[](
-                balanceOf(caller)
-            );
         uint256 counter = 0;
         if (balanceOf(caller) == 0) {
             return result;
         }
-        for (uint256 i = 0; i <= COUNTER; i++) {
+        for (uint256 i = 0; i <= tokenCounter.current(); i++) {
             if (ownerOf(i) == caller) {
-                result[counter] = _sales[i];
+                result[counter] = ticketManager._sales[i];
                 counter++;
             }
         }

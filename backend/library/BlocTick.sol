@@ -20,21 +20,20 @@ library BlocTick {
         string description;
         TicketType ticket_type;
         uint256 quantity_available;
-        uint256 max_per_order;
         uint256 price;
     }
     struct SuccessfulPurchase {
         string purchaseId;
         address buyer;
         uint256 tokenId;
-        Ticket ticket;
+        uint256 ticketId;
         uint256 cost;
     }
     struct TicketPurchase {
         string purchaseId;
         uint256 ticketId;
         string tokenURI;
-        address owner;
+        address buyer;
         uint256 cost;
     }
     event NewEvent(address);
