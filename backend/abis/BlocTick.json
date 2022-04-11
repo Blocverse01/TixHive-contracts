@@ -7,7 +7,7 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "contractAddress",
+          "name": "",
           "type": "address"
         }
       ],
@@ -15,24 +15,24 @@
       "type": "event"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.12+commit.f00d7308\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"contractAddress\",\"type\":\"address\"}],\"name\":\"NewEvent\",\"type\":\"event\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/backend/contracts/BlocTick.sol\":\"BlocTick\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/backend/contracts/BlocTick.sol\":{\"keccak256\":\"0x2e0241b182b828940b92ab6bcaf2fb016d61159a02db7db72a71857f53e47871\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://3ebe4d484574b7149c3a60f8ae6e8684ffafeb49ddf0fbf5432eb9c85d712242\",\"dweb:/ipfs/Qme3gYaatk8Z9bPuxhP5CPZb3dR9fhW6RfB1Ds2nDThKCm\"]}},\"version\":1}",
-  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212202d70584d1de627f9ee23c2f4917b51e0e6f4ad9d911887e60d55dcca4d10474d64736f6c634300080c0033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212202d70584d1de627f9ee23c2f4917b51e0e6f4ad9d911887e60d55dcca4d10474d64736f6c634300080c0033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.13+commit.abaa5c0e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"NewEvent\",\"type\":\"event\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/backend/contracts/BlocTick.sol\":\"BlocTick\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/backend/contracts/BlocTick.sol\":{\"keccak256\":\"0x29ef5df492dbab66033e58b937ee880b44f56bd150a88e51cfffce44a35cfbc8\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://dccce9c9e620b0369dd97194b8f0fd051076a21ed091cbf12036564283ddbdcb\",\"dweb:/ipfs/QmafhYFNpmhrhuMaQDE8BFAEBPTtaurYSrrvFe34zLVJsr\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220b15bb4c0ef23078027385a741d2f59c5187c4b99c55c77b531829e4600eaabaf64736f6c634300080d0033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220b15bb4c0ef23078027385a741d2f59c5187c4b99c55c77b531829e4600eaabaf64736f6c634300080d0033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "69:873:11:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "69:873:11:-:0;;;;;;;;",
-  "source": "// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.6.0 <0.9.0;\n\nlibrary BlocTick {\n    struct EventData {\n        string name;\n        string ticker;\n        string host_name;\n        uint256 networkId;\n        uint256 event_time;\n        string category;\n        string description;\n        uint256 visibility;\n        string cover_image_url;\n    }\n    struct Ticket {\n        string name;\n        string description;\n        uint256 ticket_type;\n        uint256 quantity_available;\n        uint256 max_per_order;\n        uint256 price;\n    }\n    struct SuccessfulPurchase {\n        uint256 id;\n        address owner;\n        uint256 ticketId;\n    }\n    struct TicketPurchase {\n        uint256 ticketId;\n        string tokenURI;\n        address owner;\n    }\n    event NewEvent(address contractAddress);\n    modifier restrictedTo(address _owner, string memory message) {\n        require(msg.sender == _owner, message);\n        _;\n    }\n}\n",
+  "sourceMap": "69:1214:11:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "69:1214:11:-:0;;;;;;;;",
+  "source": "// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.6.0 <0.9.0;\n\nlibrary BlocTick {\n    struct EventData {\n        string name;\n        string ticker;\n        string host_name;\n        string starts_on;\n        string ends_on;\n        string category;\n        string description;\n        EventVisibility visibility;\n        VenueType venue_type;\n        string venue;\n        string cover_image_url;\n    }\n    struct Ticket {\n        string name;\n        string description;\n        TicketType ticket_type;\n        uint256 quantity_available;\n        uint256 max_per_order;\n        uint256 price;\n    }\n    struct SuccessfulPurchase {\n        string purchaseId;\n        address buyer;\n        uint256 tokenId;\n        Ticket ticket;\n        uint256 cost;\n    }\n    struct TicketPurchase {\n        string purchaseId;\n        uint256 ticketId;\n        string tokenURI;\n        address owner;\n        uint256 cost;\n    }\n    event NewEvent(address);\n    modifier restrictedTo(address _owner, string memory message) {\n        require(msg.sender == _owner, message);\n        _;\n    }\n    enum VenueType {\n        Physical,\n        Virtual\n    }\n    enum TicketType {\n        Free,\n        Paid,\n        Donation\n    }\n    enum EventVisibility {\n        Private,\n        Public\n    }\n}\n",
   "sourcePath": "/workspace/nft-ticketting-contracts/backend/contracts/BlocTick.sol",
   "ast": {
     "absolutePath": "project:/backend/contracts/BlocTick.sol",
     "exportedSymbols": {
       "BlocTick": [
-        1796
+        1822
       ]
     },
-    "id": 1797,
+    "id": 1823,
     "license": "GPL-3.0",
     "nodeType": "SourceUnit",
     "nodes": [
@@ -57,9 +57,9 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 1796,
+        "id": 1822,
         "linearizedBaseContracts": [
-          1796
+          1822
         ],
         "name": "BlocTick",
         "nameLocation": "77:8:11",
@@ -67,7 +67,7 @@
         "nodes": [
           {
             "canonicalName": "BlocTick.EventData",
-            "id": 1748,
+            "id": 1754,
             "members": [
               {
                 "constant": false,
@@ -76,7 +76,7 @@
                 "name": "name",
                 "nameLocation": "126:4:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1748,
+                "scope": 1754,
                 "src": "119:11:11",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -103,7 +103,7 @@
                 "name": "ticker",
                 "nameLocation": "147:6:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1748,
+                "scope": 1754,
                 "src": "140:13:11",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -130,7 +130,7 @@
                 "name": "host_name",
                 "nameLocation": "170:9:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1748,
+                "scope": 1754,
                 "src": "163:16:11",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -154,25 +154,25 @@
                 "constant": false,
                 "id": 1737,
                 "mutability": "mutable",
-                "name": "networkId",
-                "nameLocation": "197:9:11",
+                "name": "starts_on",
+                "nameLocation": "196:9:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "189:17:11",
+                "scope": 1754,
+                "src": "189:16:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
                 },
                 "typeName": {
                   "id": 1736,
-                  "name": "uint256",
+                  "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "189:7:11",
+                  "src": "189:6:11",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
                   }
                 },
                 "visibility": "internal"
@@ -181,25 +181,25 @@
                 "constant": false,
                 "id": 1739,
                 "mutability": "mutable",
-                "name": "event_time",
-                "nameLocation": "224:10:11",
+                "name": "ends_on",
+                "nameLocation": "222:7:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "216:18:11",
+                "scope": 1754,
+                "src": "215:14:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
                 },
                 "typeName": {
                   "id": 1738,
-                  "name": "uint256",
+                  "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "216:7:11",
+                  "src": "215:6:11",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
                   }
                 },
                 "visibility": "internal"
@@ -209,10 +209,10 @@
                 "id": 1741,
                 "mutability": "mutable",
                 "name": "category",
-                "nameLocation": "251:8:11",
+                "nameLocation": "246:8:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "244:15:11",
+                "scope": 1754,
+                "src": "239:15:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -223,7 +223,7 @@
                   "id": 1740,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "244:6:11",
+                  "src": "239:6:11",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -236,10 +236,10 @@
                 "id": 1743,
                 "mutability": "mutable",
                 "name": "description",
-                "nameLocation": "276:11:11",
+                "nameLocation": "271:11:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "269:18:11",
+                "scope": 1754,
+                "src": "264:18:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -250,7 +250,7 @@
                   "id": 1742,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "269:6:11",
+                  "src": "264:6:11",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -260,40 +260,81 @@
               },
               {
                 "constant": false,
-                "id": 1745,
+                "id": 1746,
                 "mutability": "mutable",
                 "name": "visibility",
-                "nameLocation": "305:10:11",
+                "nameLocation": "308:10:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "297:18:11",
+                "scope": 1754,
+                "src": "292:26:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
+                  "typeIdentifier": "t_enum$_EventVisibility_$1821",
+                  "typeString": "enum BlocTick.EventVisibility"
                 },
                 "typeName": {
-                  "id": 1744,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "297:7:11",
+                  "id": 1745,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1744,
+                    "name": "EventVisibility",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1821,
+                    "src": "292:15:11"
+                  },
+                  "referencedDeclaration": 1821,
+                  "src": "292:15:11",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_enum$_EventVisibility_$1821",
+                    "typeString": "enum BlocTick.EventVisibility"
                   }
                 },
                 "visibility": "internal"
               },
               {
                 "constant": false,
-                "id": 1747,
+                "id": 1749,
                 "mutability": "mutable",
-                "name": "cover_image_url",
-                "nameLocation": "332:15:11",
+                "name": "venue_type",
+                "nameLocation": "338:10:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "325:22:11",
+                "scope": 1754,
+                "src": "328:20:11",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_VenueType_$1814",
+                  "typeString": "enum BlocTick.VenueType"
+                },
+                "typeName": {
+                  "id": 1748,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1747,
+                    "name": "VenueType",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1814,
+                    "src": "328:9:11"
+                  },
+                  "referencedDeclaration": 1814,
+                  "src": "328:9:11",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_VenueType_$1814",
+                    "typeString": "enum BlocTick.VenueType"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1751,
+                "mutability": "mutable",
+                "name": "venue",
+                "nameLocation": "365:5:11",
+                "nodeType": "VariableDeclaration",
+                "scope": 1754,
+                "src": "358:12:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -301,10 +342,37 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1746,
+                  "id": 1750,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "325:6:11",
+                  "src": "358:6:11",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1753,
+                "mutability": "mutable",
+                "name": "cover_image_url",
+                "nameLocation": "387:15:11",
+                "nodeType": "VariableDeclaration",
+                "scope": 1754,
+                "src": "380:22:11",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1752,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "380:6:11",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -316,118 +384,37 @@
             "name": "EventData",
             "nameLocation": "99:9:11",
             "nodeType": "StructDefinition",
-            "scope": 1796,
-            "src": "92:262:11",
+            "scope": 1822,
+            "src": "92:317:11",
             "visibility": "public"
           },
           {
             "canonicalName": "BlocTick.Ticket",
-            "id": 1761,
+            "id": 1768,
             "members": [
-              {
-                "constant": false,
-                "id": 1750,
-                "mutability": "mutable",
-                "name": "name",
-                "nameLocation": "390:4:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1761,
-                "src": "383:11:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
-                },
-                "typeName": {
-                  "id": 1749,
-                  "name": "string",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "383:6:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1752,
-                "mutability": "mutable",
-                "name": "description",
-                "nameLocation": "411:11:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1761,
-                "src": "404:18:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
-                },
-                "typeName": {
-                  "id": 1751,
-                  "name": "string",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "404:6:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1754,
-                "mutability": "mutable",
-                "name": "ticket_type",
-                "nameLocation": "440:11:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1761,
-                "src": "432:19:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1753,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "432:7:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
               {
                 "constant": false,
                 "id": 1756,
                 "mutability": "mutable",
-                "name": "quantity_available",
-                "nameLocation": "469:18:11",
+                "name": "name",
+                "nameLocation": "445:4:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1761,
-                "src": "461:26:11",
+                "scope": 1768,
+                "src": "438:11:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
                 },
                 "typeName": {
                   "id": 1755,
-                  "name": "uint256",
+                  "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "461:7:11",
+                  "src": "438:6:11",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
                   }
                 },
                 "visibility": "internal"
@@ -436,77 +423,72 @@
                 "constant": false,
                 "id": 1758,
                 "mutability": "mutable",
-                "name": "max_per_order",
-                "nameLocation": "505:13:11",
+                "name": "description",
+                "nameLocation": "466:11:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1761,
-                "src": "497:21:11",
+                "scope": 1768,
+                "src": "459:18:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
                 },
                 "typeName": {
                   "id": 1757,
-                  "name": "uint256",
+                  "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "497:7:11",
+                  "src": "459:6:11",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
                   }
                 },
                 "visibility": "internal"
               },
               {
                 "constant": false,
-                "id": 1760,
+                "id": 1761,
                 "mutability": "mutable",
-                "name": "price",
-                "nameLocation": "536:5:11",
+                "name": "ticket_type",
+                "nameLocation": "498:11:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1761,
-                "src": "528:13:11",
+                "scope": 1768,
+                "src": "487:22:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
+                  "typeIdentifier": "t_enum$_TicketType_$1818",
+                  "typeString": "enum BlocTick.TicketType"
                 },
                 "typeName": {
-                  "id": 1759,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "528:7:11",
+                  "id": 1760,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1759,
+                    "name": "TicketType",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1818,
+                    "src": "487:10:11"
+                  },
+                  "referencedDeclaration": 1818,
+                  "src": "487:10:11",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_enum$_TicketType_$1818",
+                    "typeString": "enum BlocTick.TicketType"
                   }
                 },
                 "visibility": "internal"
-              }
-            ],
-            "name": "Ticket",
-            "nameLocation": "366:6:11",
-            "nodeType": "StructDefinition",
-            "scope": 1796,
-            "src": "359:189:11",
-            "visibility": "public"
-          },
-          {
-            "canonicalName": "BlocTick.SuccessfulPurchase",
-            "id": 1768,
-            "members": [
+              },
               {
                 "constant": false,
                 "id": 1763,
                 "mutability": "mutable",
-                "name": "id",
-                "nameLocation": "597:2:11",
+                "name": "quantity_available",
+                "nameLocation": "527:18:11",
                 "nodeType": "VariableDeclaration",
                 "scope": 1768,
-                "src": "589:10:11",
+                "src": "519:26:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -517,7 +499,7 @@
                   "id": 1762,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "589:7:11",
+                  "src": "519:7:11",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -529,26 +511,25 @@
                 "constant": false,
                 "id": 1765,
                 "mutability": "mutable",
-                "name": "owner",
-                "nameLocation": "617:5:11",
+                "name": "max_per_order",
+                "nameLocation": "563:13:11",
                 "nodeType": "VariableDeclaration",
                 "scope": 1768,
-                "src": "609:13:11",
+                "src": "555:21:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_address",
-                  "typeString": "address"
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
                 },
                 "typeName": {
                   "id": 1764,
-                  "name": "address",
+                  "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "609:7:11",
-                  "stateMutability": "nonpayable",
+                  "src": "555:7:11",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
                   }
                 },
                 "visibility": "internal"
@@ -557,11 +538,11 @@
                 "constant": false,
                 "id": 1767,
                 "mutability": "mutable",
-                "name": "ticketId",
-                "nameLocation": "640:8:11",
+                "name": "price",
+                "nameLocation": "594:5:11",
                 "nodeType": "VariableDeclaration",
                 "scope": 1768,
-                "src": "632:16:11",
+                "src": "586:13:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -572,7 +553,7 @@
                   "id": 1766,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "632:7:11",
+                  "src": "586:7:11",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -581,53 +562,26 @@
                 "visibility": "internal"
               }
             ],
-            "name": "SuccessfulPurchase",
-            "nameLocation": "560:18:11",
+            "name": "Ticket",
+            "nameLocation": "421:6:11",
             "nodeType": "StructDefinition",
-            "scope": 1796,
-            "src": "553:102:11",
+            "scope": 1822,
+            "src": "414:192:11",
             "visibility": "public"
           },
           {
-            "canonicalName": "BlocTick.TicketPurchase",
-            "id": 1775,
+            "canonicalName": "BlocTick.SuccessfulPurchase",
+            "id": 1780,
             "members": [
               {
                 "constant": false,
                 "id": 1770,
                 "mutability": "mutable",
-                "name": "ticketId",
-                "nameLocation": "700:8:11",
+                "name": "purchaseId",
+                "nameLocation": "654:10:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1775,
-                "src": "692:16:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1769,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "692:7:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1772,
-                "mutability": "mutable",
-                "name": "tokenURI",
-                "nameLocation": "725:8:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1775,
-                "src": "718:15:11",
+                "scope": 1780,
+                "src": "647:17:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -635,10 +589,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1771,
+                  "id": 1769,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "718:6:11",
+                  "src": "647:6:11",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -648,13 +602,13 @@
               },
               {
                 "constant": false,
-                "id": 1774,
+                "id": 1772,
                 "mutability": "mutable",
-                "name": "owner",
-                "nameLocation": "751:5:11",
+                "name": "buyer",
+                "nameLocation": "682:5:11",
                 "nodeType": "VariableDeclaration",
-                "scope": 1775,
-                "src": "743:13:11",
+                "scope": 1780,
+                "src": "674:13:11",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -662,10 +616,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 1773,
+                  "id": 1771,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "743:7:11",
+                  "src": "674:7:11",
                   "stateMutability": "nonpayable",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
@@ -673,35 +627,272 @@
                   }
                 },
                 "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1774,
+                "mutability": "mutable",
+                "name": "tokenId",
+                "nameLocation": "705:7:11",
+                "nodeType": "VariableDeclaration",
+                "scope": 1780,
+                "src": "697:15:11",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1773,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "697:7:11",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1777,
+                "mutability": "mutable",
+                "name": "ticket",
+                "nameLocation": "729:6:11",
+                "nodeType": "VariableDeclaration",
+                "scope": 1780,
+                "src": "722:13:11",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Ticket_$1768_storage_ptr",
+                  "typeString": "struct BlocTick.Ticket"
+                },
+                "typeName": {
+                  "id": 1776,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 1775,
+                    "name": "Ticket",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 1768,
+                    "src": "722:6:11"
+                  },
+                  "referencedDeclaration": 1768,
+                  "src": "722:6:11",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Ticket_$1768_storage_ptr",
+                    "typeString": "struct BlocTick.Ticket"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1779,
+                "mutability": "mutable",
+                "name": "cost",
+                "nameLocation": "753:4:11",
+                "nodeType": "VariableDeclaration",
+                "scope": 1780,
+                "src": "745:12:11",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1778,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "745:7:11",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "SuccessfulPurchase",
+            "nameLocation": "618:18:11",
+            "nodeType": "StructDefinition",
+            "scope": 1822,
+            "src": "611:153:11",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "BlocTick.TicketPurchase",
+            "id": 1791,
+            "members": [
+              {
+                "constant": false,
+                "id": 1782,
+                "mutability": "mutable",
+                "name": "purchaseId",
+                "nameLocation": "808:10:11",
+                "nodeType": "VariableDeclaration",
+                "scope": 1791,
+                "src": "801:17:11",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1781,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "801:6:11",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1784,
+                "mutability": "mutable",
+                "name": "ticketId",
+                "nameLocation": "836:8:11",
+                "nodeType": "VariableDeclaration",
+                "scope": 1791,
+                "src": "828:16:11",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1783,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "828:7:11",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1786,
+                "mutability": "mutable",
+                "name": "tokenURI",
+                "nameLocation": "861:8:11",
+                "nodeType": "VariableDeclaration",
+                "scope": 1791,
+                "src": "854:15:11",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1785,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "854:6:11",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1788,
+                "mutability": "mutable",
+                "name": "owner",
+                "nameLocation": "887:5:11",
+                "nodeType": "VariableDeclaration",
+                "scope": 1791,
+                "src": "879:13:11",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1787,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "879:7:11",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1790,
+                "mutability": "mutable",
+                "name": "cost",
+                "nameLocation": "910:4:11",
+                "nodeType": "VariableDeclaration",
+                "scope": 1791,
+                "src": "902:12:11",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1789,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "902:7:11",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
               }
             ],
             "name": "TicketPurchase",
-            "nameLocation": "667:14:11",
+            "nameLocation": "776:14:11",
             "nodeType": "StructDefinition",
-            "scope": 1796,
-            "src": "660:103:11",
+            "scope": 1822,
+            "src": "769:152:11",
             "visibility": "public"
           },
           {
             "anonymous": false,
-            "id": 1779,
+            "eventSelector": "0227e3b2fb10ea87b3ce0fe9b23554ad992c666dd128c13c0a6ef2d73dd80ba0",
+            "id": 1795,
             "name": "NewEvent",
-            "nameLocation": "774:8:11",
+            "nameLocation": "932:8:11",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 1778,
+              "id": 1794,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1777,
+                  "id": 1793,
                   "indexed": false,
                   "mutability": "mutable",
-                  "name": "contractAddress",
-                  "nameLocation": "791:15:11",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1779,
-                  "src": "783:23:11",
+                  "scope": 1795,
+                  "src": "941:7:11",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -709,10 +900,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1776,
+                    "id": 1792,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "783:7:11",
+                    "src": "941:7:11",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -722,15 +913,15 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "782:25:11"
+              "src": "940:9:11"
             },
-            "src": "768:40:11"
+            "src": "926:24:11"
           },
           {
             "body": {
-              "id": 1794,
+              "id": 1810,
               "nodeType": "Block",
-              "src": "874:66:11",
+              "src": "1016:66:11",
               "statements": [
                 {
                   "expression": {
@@ -740,32 +931,32 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 1789,
+                        "id": 1805,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "expression": {
-                            "id": 1786,
+                            "id": 1802,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
                             "referencedDeclaration": 4294967281,
-                            "src": "892:3:11",
+                            "src": "1034:3:11",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
                               "typeString": "msg"
                             }
                           },
-                          "id": 1787,
+                          "id": 1803,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "sender",
                           "nodeType": "MemberAccess",
-                          "src": "892:10:11",
+                          "src": "1034:10:11",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -774,30 +965,30 @@
                         "nodeType": "BinaryOperation",
                         "operator": "==",
                         "rightExpression": {
-                          "id": 1788,
+                          "id": 1804,
                           "name": "_owner",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1781,
-                          "src": "906:6:11",
+                          "referencedDeclaration": 1797,
+                          "src": "1048:6:11",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
                           }
                         },
-                        "src": "892:20:11",
+                        "src": "1034:20:11",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
                         }
                       },
                       {
-                        "id": 1790,
+                        "id": 1806,
                         "name": "message",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1783,
-                        "src": "914:7:11",
+                        "referencedDeclaration": 1799,
+                        "src": "1056:7:11",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
                           "typeString": "string memory"
@@ -815,7 +1006,7 @@
                           "typeString": "string memory"
                         }
                       ],
-                      "id": 1785,
+                      "id": 1801,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -823,13 +1014,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "884:7:11",
+                      "src": "1026:7:11",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 1791,
+                    "id": 1807,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -837,41 +1028,41 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "884:38:11",
+                    "src": "1026:38:11",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 1792,
+                  "id": 1808,
                   "nodeType": "ExpressionStatement",
-                  "src": "884:38:11"
+                  "src": "1026:38:11"
                 },
                 {
-                  "id": 1793,
+                  "id": 1809,
                   "nodeType": "PlaceholderStatement",
-                  "src": "932:1:11"
+                  "src": "1074:1:11"
                 }
               ]
             },
-            "id": 1795,
+            "id": 1811,
             "name": "restrictedTo",
-            "nameLocation": "822:12:11",
+            "nameLocation": "964:12:11",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 1784,
+              "id": 1800,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1781,
+                  "id": 1797,
                   "mutability": "mutable",
                   "name": "_owner",
-                  "nameLocation": "843:6:11",
+                  "nameLocation": "985:6:11",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1795,
-                  "src": "835:14:11",
+                  "scope": 1811,
+                  "src": "977:14:11",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -879,10 +1070,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1780,
+                    "id": 1796,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "835:7:11",
+                    "src": "977:7:11",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -893,13 +1084,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 1783,
+                  "id": 1799,
                   "mutability": "mutable",
                   "name": "message",
-                  "nameLocation": "865:7:11",
+                  "nameLocation": "1007:7:11",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1795,
-                  "src": "851:21:11",
+                  "scope": 1811,
+                  "src": "993:21:11",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -907,10 +1098,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1782,
+                    "id": 1798,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "851:6:11",
+                    "src": "993:6:11",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -919,931 +1110,102 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "834:39:11"
+              "src": "976:39:11"
             },
-            "src": "813:127:11",
+            "src": "955:127:11",
             "virtual": false,
             "visibility": "internal"
+          },
+          {
+            "canonicalName": "BlocTick.VenueType",
+            "id": 1814,
+            "members": [
+              {
+                "id": 1812,
+                "name": "Physical",
+                "nameLocation": "1112:8:11",
+                "nodeType": "EnumValue",
+                "src": "1112:8:11"
+              },
+              {
+                "id": 1813,
+                "name": "Virtual",
+                "nameLocation": "1130:7:11",
+                "nodeType": "EnumValue",
+                "src": "1130:7:11"
+              }
+            ],
+            "name": "VenueType",
+            "nameLocation": "1092:9:11",
+            "nodeType": "EnumDefinition",
+            "src": "1087:56:11"
+          },
+          {
+            "canonicalName": "BlocTick.TicketType",
+            "id": 1818,
+            "members": [
+              {
+                "id": 1815,
+                "name": "Free",
+                "nameLocation": "1174:4:11",
+                "nodeType": "EnumValue",
+                "src": "1174:4:11"
+              },
+              {
+                "id": 1816,
+                "name": "Paid",
+                "nameLocation": "1188:4:11",
+                "nodeType": "EnumValue",
+                "src": "1188:4:11"
+              },
+              {
+                "id": 1817,
+                "name": "Donation",
+                "nameLocation": "1202:8:11",
+                "nodeType": "EnumValue",
+                "src": "1202:8:11"
+              }
+            ],
+            "name": "TicketType",
+            "nameLocation": "1153:10:11",
+            "nodeType": "EnumDefinition",
+            "src": "1148:68:11"
+          },
+          {
+            "canonicalName": "BlocTick.EventVisibility",
+            "id": 1821,
+            "members": [
+              {
+                "id": 1819,
+                "name": "Private",
+                "nameLocation": "1252:7:11",
+                "nodeType": "EnumValue",
+                "src": "1252:7:11"
+              },
+              {
+                "id": 1820,
+                "name": "Public",
+                "nameLocation": "1269:6:11",
+                "nodeType": "EnumValue",
+                "src": "1269:6:11"
+              }
+            ],
+            "name": "EventVisibility",
+            "nameLocation": "1226:15:11",
+            "nodeType": "EnumDefinition",
+            "src": "1221:60:11"
           }
         ],
-        "scope": 1797,
-        "src": "69:873:11",
+        "scope": 1823,
+        "src": "69:1214:11",
         "usedErrors": []
       }
     ],
-    "src": "36:907:11"
-  },
-  "legacyAST": {
-    "absolutePath": "project:/backend/contracts/BlocTick.sol",
-    "exportedSymbols": {
-      "BlocTick": [
-        1796
-      ]
-    },
-    "id": 1797,
-    "license": "GPL-3.0",
-    "nodeType": "SourceUnit",
-    "nodes": [
-      {
-        "id": 1729,
-        "literals": [
-          "solidity",
-          ">=",
-          "0.6",
-          ".0",
-          "<",
-          "0.9",
-          ".0"
-        ],
-        "nodeType": "PragmaDirective",
-        "src": "36:31:11"
-      },
-      {
-        "abstract": false,
-        "baseContracts": [],
-        "canonicalName": "BlocTick",
-        "contractDependencies": [],
-        "contractKind": "library",
-        "fullyImplemented": true,
-        "id": 1796,
-        "linearizedBaseContracts": [
-          1796
-        ],
-        "name": "BlocTick",
-        "nameLocation": "77:8:11",
-        "nodeType": "ContractDefinition",
-        "nodes": [
-          {
-            "canonicalName": "BlocTick.EventData",
-            "id": 1748,
-            "members": [
-              {
-                "constant": false,
-                "id": 1731,
-                "mutability": "mutable",
-                "name": "name",
-                "nameLocation": "126:4:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "119:11:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
-                },
-                "typeName": {
-                  "id": 1730,
-                  "name": "string",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "119:6:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1733,
-                "mutability": "mutable",
-                "name": "ticker",
-                "nameLocation": "147:6:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "140:13:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
-                },
-                "typeName": {
-                  "id": 1732,
-                  "name": "string",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "140:6:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1735,
-                "mutability": "mutable",
-                "name": "host_name",
-                "nameLocation": "170:9:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "163:16:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
-                },
-                "typeName": {
-                  "id": 1734,
-                  "name": "string",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "163:6:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1737,
-                "mutability": "mutable",
-                "name": "networkId",
-                "nameLocation": "197:9:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "189:17:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1736,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "189:7:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1739,
-                "mutability": "mutable",
-                "name": "event_time",
-                "nameLocation": "224:10:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "216:18:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1738,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "216:7:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1741,
-                "mutability": "mutable",
-                "name": "category",
-                "nameLocation": "251:8:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "244:15:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
-                },
-                "typeName": {
-                  "id": 1740,
-                  "name": "string",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "244:6:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1743,
-                "mutability": "mutable",
-                "name": "description",
-                "nameLocation": "276:11:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "269:18:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
-                },
-                "typeName": {
-                  "id": 1742,
-                  "name": "string",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "269:6:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1745,
-                "mutability": "mutable",
-                "name": "visibility",
-                "nameLocation": "305:10:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "297:18:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1744,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "297:7:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1747,
-                "mutability": "mutable",
-                "name": "cover_image_url",
-                "nameLocation": "332:15:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1748,
-                "src": "325:22:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
-                },
-                "typeName": {
-                  "id": 1746,
-                  "name": "string",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "325:6:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
-                  }
-                },
-                "visibility": "internal"
-              }
-            ],
-            "name": "EventData",
-            "nameLocation": "99:9:11",
-            "nodeType": "StructDefinition",
-            "scope": 1796,
-            "src": "92:262:11",
-            "visibility": "public"
-          },
-          {
-            "canonicalName": "BlocTick.Ticket",
-            "id": 1761,
-            "members": [
-              {
-                "constant": false,
-                "id": 1750,
-                "mutability": "mutable",
-                "name": "name",
-                "nameLocation": "390:4:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1761,
-                "src": "383:11:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
-                },
-                "typeName": {
-                  "id": 1749,
-                  "name": "string",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "383:6:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1752,
-                "mutability": "mutable",
-                "name": "description",
-                "nameLocation": "411:11:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1761,
-                "src": "404:18:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
-                },
-                "typeName": {
-                  "id": 1751,
-                  "name": "string",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "404:6:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1754,
-                "mutability": "mutable",
-                "name": "ticket_type",
-                "nameLocation": "440:11:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1761,
-                "src": "432:19:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1753,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "432:7:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1756,
-                "mutability": "mutable",
-                "name": "quantity_available",
-                "nameLocation": "469:18:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1761,
-                "src": "461:26:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1755,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "461:7:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1758,
-                "mutability": "mutable",
-                "name": "max_per_order",
-                "nameLocation": "505:13:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1761,
-                "src": "497:21:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1757,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "497:7:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1760,
-                "mutability": "mutable",
-                "name": "price",
-                "nameLocation": "536:5:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1761,
-                "src": "528:13:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1759,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "528:7:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              }
-            ],
-            "name": "Ticket",
-            "nameLocation": "366:6:11",
-            "nodeType": "StructDefinition",
-            "scope": 1796,
-            "src": "359:189:11",
-            "visibility": "public"
-          },
-          {
-            "canonicalName": "BlocTick.SuccessfulPurchase",
-            "id": 1768,
-            "members": [
-              {
-                "constant": false,
-                "id": 1763,
-                "mutability": "mutable",
-                "name": "id",
-                "nameLocation": "597:2:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1768,
-                "src": "589:10:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1762,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "589:7:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1765,
-                "mutability": "mutable",
-                "name": "owner",
-                "nameLocation": "617:5:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1768,
-                "src": "609:13:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_address",
-                  "typeString": "address"
-                },
-                "typeName": {
-                  "id": 1764,
-                  "name": "address",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "609:7:11",
-                  "stateMutability": "nonpayable",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1767,
-                "mutability": "mutable",
-                "name": "ticketId",
-                "nameLocation": "640:8:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1768,
-                "src": "632:16:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1766,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "632:7:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              }
-            ],
-            "name": "SuccessfulPurchase",
-            "nameLocation": "560:18:11",
-            "nodeType": "StructDefinition",
-            "scope": 1796,
-            "src": "553:102:11",
-            "visibility": "public"
-          },
-          {
-            "canonicalName": "BlocTick.TicketPurchase",
-            "id": 1775,
-            "members": [
-              {
-                "constant": false,
-                "id": 1770,
-                "mutability": "mutable",
-                "name": "ticketId",
-                "nameLocation": "700:8:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1775,
-                "src": "692:16:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 1769,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "692:7:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1772,
-                "mutability": "mutable",
-                "name": "tokenURI",
-                "nameLocation": "725:8:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1775,
-                "src": "718:15:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
-                },
-                "typeName": {
-                  "id": 1771,
-                  "name": "string",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "718:6:11",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 1774,
-                "mutability": "mutable",
-                "name": "owner",
-                "nameLocation": "751:5:11",
-                "nodeType": "VariableDeclaration",
-                "scope": 1775,
-                "src": "743:13:11",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_address",
-                  "typeString": "address"
-                },
-                "typeName": {
-                  "id": 1773,
-                  "name": "address",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "743:7:11",
-                  "stateMutability": "nonpayable",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  }
-                },
-                "visibility": "internal"
-              }
-            ],
-            "name": "TicketPurchase",
-            "nameLocation": "667:14:11",
-            "nodeType": "StructDefinition",
-            "scope": 1796,
-            "src": "660:103:11",
-            "visibility": "public"
-          },
-          {
-            "anonymous": false,
-            "id": 1779,
-            "name": "NewEvent",
-            "nameLocation": "774:8:11",
-            "nodeType": "EventDefinition",
-            "parameters": {
-              "id": 1778,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1777,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "contractAddress",
-                  "nameLocation": "791:15:11",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1779,
-                  "src": "783:23:11",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1776,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "783:7:11",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "782:25:11"
-            },
-            "src": "768:40:11"
-          },
-          {
-            "body": {
-              "id": 1794,
-              "nodeType": "Block",
-              "src": "874:66:11",
-              "statements": [
-                {
-                  "expression": {
-                    "arguments": [
-                      {
-                        "commonType": {
-                          "typeIdentifier": "t_address",
-                          "typeString": "address"
-                        },
-                        "id": 1789,
-                        "isConstant": false,
-                        "isLValue": false,
-                        "isPure": false,
-                        "lValueRequested": false,
-                        "leftExpression": {
-                          "expression": {
-                            "id": 1786,
-                            "name": "msg",
-                            "nodeType": "Identifier",
-                            "overloadedDeclarations": [],
-                            "referencedDeclaration": 4294967281,
-                            "src": "892:3:11",
-                            "typeDescriptions": {
-                              "typeIdentifier": "t_magic_message",
-                              "typeString": "msg"
-                            }
-                          },
-                          "id": 1787,
-                          "isConstant": false,
-                          "isLValue": false,
-                          "isPure": false,
-                          "lValueRequested": false,
-                          "memberName": "sender",
-                          "nodeType": "MemberAccess",
-                          "src": "892:10:11",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_address",
-                            "typeString": "address"
-                          }
-                        },
-                        "nodeType": "BinaryOperation",
-                        "operator": "==",
-                        "rightExpression": {
-                          "id": 1788,
-                          "name": "_owner",
-                          "nodeType": "Identifier",
-                          "overloadedDeclarations": [],
-                          "referencedDeclaration": 1781,
-                          "src": "906:6:11",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_address",
-                            "typeString": "address"
-                          }
-                        },
-                        "src": "892:20:11",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_bool",
-                          "typeString": "bool"
-                        }
-                      },
-                      {
-                        "id": 1790,
-                        "name": "message",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 1783,
-                        "src": "914:7:11",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_string_memory_ptr",
-                          "typeString": "string memory"
-                        }
-                      }
-                    ],
-                    "expression": {
-                      "argumentTypes": [
-                        {
-                          "typeIdentifier": "t_bool",
-                          "typeString": "bool"
-                        },
-                        {
-                          "typeIdentifier": "t_string_memory_ptr",
-                          "typeString": "string memory"
-                        }
-                      ],
-                      "id": 1785,
-                      "name": "require",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        4294967278,
-                        4294967278
-                      ],
-                      "referencedDeclaration": 4294967278,
-                      "src": "884:7:11",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
-                        "typeString": "function (bool,string memory) pure"
-                      }
-                    },
-                    "id": 1791,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "kind": "functionCall",
-                    "lValueRequested": false,
-                    "names": [],
-                    "nodeType": "FunctionCall",
-                    "src": "884:38:11",
-                    "tryCall": false,
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_tuple$__$",
-                      "typeString": "tuple()"
-                    }
-                  },
-                  "id": 1792,
-                  "nodeType": "ExpressionStatement",
-                  "src": "884:38:11"
-                },
-                {
-                  "id": 1793,
-                  "nodeType": "PlaceholderStatement",
-                  "src": "932:1:11"
-                }
-              ]
-            },
-            "id": 1795,
-            "name": "restrictedTo",
-            "nameLocation": "822:12:11",
-            "nodeType": "ModifierDefinition",
-            "parameters": {
-              "id": 1784,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 1781,
-                  "mutability": "mutable",
-                  "name": "_owner",
-                  "nameLocation": "843:6:11",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1795,
-                  "src": "835:14:11",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 1780,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "835:7:11",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 1783,
-                  "mutability": "mutable",
-                  "name": "message",
-                  "nameLocation": "865:7:11",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 1795,
-                  "src": "851:21:11",
-                  "stateVariable": false,
-                  "storageLocation": "memory",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_memory_ptr",
-                    "typeString": "string"
-                  },
-                  "typeName": {
-                    "id": 1782,
-                    "name": "string",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "851:6:11",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_string_storage_ptr",
-                      "typeString": "string"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "834:39:11"
-            },
-            "src": "813:127:11",
-            "virtual": false,
-            "visibility": "internal"
-          }
-        ],
-        "scope": 1797,
-        "src": "69:873:11",
-        "usedErrors": []
-      }
-    ],
-    "src": "36:907:11"
+    "src": "36:1248:11"
   },
   "compiler": {
     "name": "solc",
-    "version": "0.8.12+commit.f00d7308.Emscripten.clang"
+    "version": "0.8.13+commit.abaa5c0e.Emscripten.clang"
   },
   "networks": {
     "80001": {
@@ -1867,9 +1229,8 @@
       "transactionHash": "0xc2acdfa40b643c583662fa0c72bca15772e073d05ad3fc34dbaa96c5f3a701bc"
     }
   },
-  "schemaVersion": "3.4.5",
-  "updatedAt": "2022-03-08T14:56:57.879Z",
-  "networkType": "ethereum",
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-04-11T07:15:28.602Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

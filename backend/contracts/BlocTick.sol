@@ -10,7 +10,7 @@ library BlocTick {
         string ends_on;
         string category;
         string description;
-        uint256 visibility;
+        EventVisibility visibility;
         VenueType venue_type;
         string venue;
         string cover_image_url;
@@ -24,16 +24,20 @@ library BlocTick {
         uint256 price;
     }
     struct SuccessfulPurchase {
-        uint256 id;
-        address owner;
-        uint256 ticketId;
+        string purchaseId;
+        address buyer;
+        uint256 tokenId;
+        Ticket ticket;
+        uint256 cost;
     }
     struct TicketPurchase {
+        string purchaseId;
         uint256 ticketId;
         string tokenURI;
         address owner;
+        uint256 cost;
     }
-    event NewEvent(address contractAddress);
+    event NewEvent(address);
     modifier restrictedTo(address _owner, string memory message) {
         require(msg.sender == _owner, message);
         _;
@@ -46,5 +50,9 @@ library BlocTick {
         Free,
         Paid,
         Donation
+    }
+    enum EventVisibility {
+        Private,
+        Public
     }
 }

@@ -6,14 +6,13 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "./BlocTick.sol";
 
 contract Event is ERC721URIStorage {
-    using TicketType for BlocTick.TicketType;
     uint256 private COUNTER;
     address public _owner;
     uint256 public _created_at;
     string public _status;
     address private _factory;
     BlocTick.Ticket[] public _tickets;
-    BlocTick.SuccessfulPurchase[] public _sales;
+    mapping(uint256 => BlocTick.SuccessfulPurchase) public _sales;
     BlocTick.EventData public _eventData;
 
     modifier onlyFactory() {
@@ -39,7 +38,7 @@ contract Event is ERC721URIStorage {
         _transfer(address(this), __owner, _id); //nft to user
     }
 
-    function mint(BlocTick.TicketPurchase[] memory purchases)
+    function purchaseTickets(BlocTick.TicketPurchase[] memory purchases)
         external
         payable
         onlyFactory
@@ -49,17 +48,17 @@ contract Event is ERC721URIStorage {
             BlocTick.TicketPurchase memory purchase = purchases[i];
             uint256 _tokenId = COUNTER;
             _mint(address(this), _tokenId);
+            COUNTER++;
             _setTokenURI(_tokenId, purchase.tokenURI);
-            _sales.push(
-                BlocTick.SuccessfulPurchase(
-                    _tokenId,
-                    purchase.owner,
-                    purchase.ticketId
-                )
+            _sales[_tokenId] = BlocTick.SuccessfulPurchase(
+                purchase.purchaseId,
+                purchase.owner,
+                _tokenId,
+                _tickets[purchase.ticketId],
+                purchase.cost
             );
             _validate(_tokenId);
             _trade(_tokenId, purchase.owner);
-            COUNTER++;
         }
     }
 
@@ -75,7 +74,7 @@ contract Event is ERC721URIStorage {
         uint256 total = 0;
         for (uint256 i = 0; i < purchases.length; i++) {
             BlocTick.Ticket memory ticket = _tickets[purchases[i].ticketId];
-            if (ticket.ticket_type == TicketType.Donation) {
+            if (ticket.ticket_type == BlocTick.TicketType.Donation) {
                 continue;
             }
             total += ticket.price;
@@ -91,13 +90,12 @@ contract Event is ERC721URIStorage {
         for (uint256 i = 0; i < tickets.length; i++) {
             BlocTick.Ticket memory ticket = tickets[i];
             if (
-                ticket.ticket_type != TicketType.Free &&
-                ticket.ticket_type != PAID_TICKET &&
-                ticket.ticket_type != DONATION_TICKET
+                ticket.ticket_type < BlocTick.TicketType.Free &&
+                ticket.ticket_type > BlocTick.TicketType.Donation
             ) {
-                ticket.ticket_type = TicketType.Free;
+                ticket.ticket_type = BlocTick.TicketType.Free;
             }
-            if (ticket.ticket_type == TicketType.Free) {
+            if (ticket.ticket_type == BlocTick.TicketType.Free) {
                 ticket.price = 0;
             }
             _tickets.push(
