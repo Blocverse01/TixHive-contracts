@@ -7,6 +7,7 @@
     "dotenv": "^16.0.0",
     "truffle": "^5.5.3",
     "truffle-contract-size": "^2.0.1",
-    "truffle-plugin-verify": "^0.5.21"
+    "truffle-flattener": "^1.6.0",
+    "truffle-plugin-verify": "^0.5.24"
   }
 }
