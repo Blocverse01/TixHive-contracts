@@ -4,26 +4,20 @@ pragma solidity >=0.6.0 <0.9.0;
 import "./Event.sol";
 
 contract EventFactory {
-    Event[] public _events;
+    Event[] _events;
 
-    function allEvents() public view returns (Event[] memory) {
+    function allEvents() external view returns (Event[] memory) {
         return _events;
     }
 
     function addEvent(
-        BlocTick.EventData memory eventData,
+        string memory name,
+        string memory symbol,
         BlocTick.Ticket[] memory tickets
-    ) external returns (Event) {
-        if (
-            eventData.visibility < BlocTick.EventVisibility.Private &&
-            eventData.visibility > BlocTick.EventVisibility.Public
-        ) {
-            eventData.visibility = BlocTick.EventVisibility.Public;
-        }
-        Event e = new Event(eventData.name, eventData.ticker, msg.sender);
+    ) external returns (address) {
+        Event e = new Event(name, symbol, msg.sender);
         e.storeTickets(tickets, msg.sender);
-        e.setEventData(eventData);
         _events.push(e);
-        return e;
+        return address(e);
     }
 }

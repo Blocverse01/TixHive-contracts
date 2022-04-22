@@ -6,30 +6,30 @@ import "./BlocTick.sol";
 library TicketManager {
     struct Manager {
         BlocTick.Ticket[] _tickets;
-        mapping(uint256 => BlocTick.SuccessfulPurchase) _sales;
-    }
-
-    function getSales(Manager storage manager)
-        external
-        view
-        returns (mapping(uint256 => BlocTick.SuccessfulPurchase) storage _sales)
-    {
-        return manager._sales;
+        BlocTick.SuccessfulPurchase[] _sales;
     }
 
     function getTickets(Manager storage manager)
         external
         view
-        returns (BlocTick.Ticket[] memory _tickets)
+        returns (BlocTick.Ticket[] storage)
     {
         return manager._tickets;
+    }
+
+    function getSales(Manager storage manager)
+        external
+        view
+        returns (BlocTick.SuccessfulPurchase[] storage)
+    {
+        return manager._sales;
     }
 
     function _storeTickets(
         Manager storage manager,
         BlocTick.Ticket[] memory tickets
-    ) internal {
-        for (uint256 i = 0; i < tickets.length; i++) {
+    ) external {
+        for (uint8 i = 0; i < tickets.length; ) {
             BlocTick.Ticket memory ticket = tickets[i];
             if (
                 ticket.ticket_type < BlocTick.TicketType.Free &&
@@ -41,6 +41,9 @@ library TicketManager {
                 ticket.price = 0;
             }
             manager._tickets.push(ticket);
+            unchecked {
+                i++;
+            }
         }
     }
 
@@ -48,7 +51,7 @@ library TicketManager {
         Manager storage manager,
         BlocTick.TicketPurchase[] memory purchases
     ) internal view returns (uint256 total) {
-        for (uint256 i = 0; i < purchases.length; i++) {
+        for (uint8 i = 0; i < purchases.length; ) {
             BlocTick.Ticket memory ticket = manager._tickets[
                 purchases[i].ticketId
             ];
@@ -56,6 +59,9 @@ library TicketManager {
                 continue;
             }
             total += ticket.price;
+            unchecked {
+                i++;
+            }
         }
         return total;
     }
