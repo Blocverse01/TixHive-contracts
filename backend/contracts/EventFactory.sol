@@ -14,10 +14,10 @@ contract EventFactory {
         string memory name,
         string memory symbol,
         BlocTick.Ticket[] memory tickets
-    ) external returns (address) {
+    ) external {
         Event e = new Event(name, symbol, msg.sender);
         e.storeTickets(tickets, msg.sender);
         _events.push(e);
-        return address(e);
+        emit BlocTick.NewEvent(address(e));
     }
 }
