@@ -13,12 +13,12 @@ library BlocTick {
         string purchaseId;
         address buyer;
         uint256 tokenId;
-        uint8 ticketId;
+        uint256 ticketId;
         uint256 cost;
     }
     struct TicketPurchase {
         string purchaseId;
-        uint8 ticketId;
+        uint256 ticketId;
         string tokenURI;
         address buyer;
         uint256 cost;

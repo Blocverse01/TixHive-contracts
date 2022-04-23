@@ -9,10 +9,11 @@ import "../library/TicketManager.sol";
 contract Event is ERC721URIStorage {
     using Counters for Counters.Counter;
     using TicketManager for TicketManager.Manager;
-    Counters.Counter tokenCounter;
-    TicketManager.Manager ticketManager;
+    Counters.Counter private tokenCounter;
+    TicketManager.Manager private ticketManager;
+
     address public _owner;
-    string public _status;
+    bool public saleIsActive = false;
     address public _factory;
 
     modifier onlyFactory() {
@@ -32,12 +33,12 @@ contract Event is ERC721URIStorage {
     ) ERC721(name, symbol) {
         _factory = msg.sender;
         _owner = __owner;
-        _status = "active";
     }
 
     function purchaseTickets(BlocTick.TicketPurchase[] memory purchases)
         external
         payable
+        onlyFactory
     {
         require(
             msg.value >= ticketManager._getTotalCost(purchases),
@@ -81,8 +82,12 @@ contract Event is ERC721URIStorage {
         ticketManager._storeTickets(tickets);
     }
 
-    function setStatus(string memory __status) external onlyFactory {
-        _status = __status;
+    function openSale() external onlyEventCreator(msg.sender) {
+        saleIsActive = true;
+    }
+
+    function closeSale() external onlyEventCreator(msg.sender) {
+        saleIsActive = false;
     }
 
     function getMyTickets(address caller)
