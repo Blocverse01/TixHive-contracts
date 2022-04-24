@@ -13,7 +13,7 @@ contract Event is ERC721URIStorage {
     TicketManager.Manager private ticketManager;
 
     address public _owner;
-    bool public saleIsActive = false;
+    bool public saleIsActive = true;
     address public _factory;
 
     modifier onlyFactory() {
@@ -40,6 +40,7 @@ contract Event is ERC721URIStorage {
         payable
         onlyFactory
     {
+        require(saleIsActive);
         require(
             msg.value >= ticketManager._getTotalCost(purchases),
             "The tickets cost more"
