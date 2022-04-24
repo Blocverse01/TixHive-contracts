@@ -7,6 +7,7 @@ import "./Administrator.sol";
 contract EventFactory is Administrator {
     Event[] _events;
     uint256 platform_percent = 10;
+    event NewEvent(address contractAddress);
 
     function allEvents() external view returns (Event[] memory) {
         return _events;
@@ -20,7 +21,7 @@ contract EventFactory is Administrator {
         Event e = new Event(name, symbol, msg.sender);
         e.storeTickets(tickets, msg.sender);
         _events.push(e);
-        emit BlocTick.NewEvent(address(e));
+        emit NewEvent(address(e));
     }
 
     function setPlatformPercent(uint256 fee) external onlyAdministrator {

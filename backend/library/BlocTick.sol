@@ -23,7 +23,6 @@ library BlocTick {
         address buyer;
         uint256 cost;
     }
-    event NewEvent(address);
     enum TicketType {
         Free,
         Paid,
