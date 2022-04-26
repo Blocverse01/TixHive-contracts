@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./TicketManager.sol";
+import "./BlocTick.sol";
 
 contract Event is ERC721URIStorage {
     using Counters for Counters.Counter;
@@ -72,15 +73,9 @@ contract Event is ERC721URIStorage {
     function getEventInfo()
         external
         view
-        returns (
-            uint256,
-            BlocTick.SuccessfulPurchase[] memory
-        )
+        returns (uint256, BlocTick.SuccessfulPurchase[] memory)
     {
-        return (
-            totalSold,
-            ticketManager.getSales()
-        );
+        return (totalSold, ticketManager.getSales());
     }
 
     function storeTickets(BlocTick.Ticket[] memory tickets, address caller)

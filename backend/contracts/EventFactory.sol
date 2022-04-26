@@ -3,6 +3,7 @@ pragma solidity >=0.6.0 <0.9.0;
 
 import "./Event.sol";
 import "./Administrator.sol";
+import "./BlocTick.sol";
 
 contract EventFactory is Administrator {
     Event[] _events;
