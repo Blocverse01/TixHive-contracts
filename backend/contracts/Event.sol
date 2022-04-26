@@ -14,7 +14,8 @@ contract Event is ERC721URIStorage {
 
     address public _owner;
     bool public saleIsActive = true;
-    address public _factory;
+    uint256 private totalSold;
+    address private _factory;
 
     modifier onlyFactory() {
         require(msg.sender == _factory, "You need to use the factory");
@@ -65,14 +66,21 @@ contract Event is ERC721URIStorage {
                 i++;
             }
         }
+        totalSold += msg.value;
     }
 
-    function getEventTickets()
+    function getEventInfo()
         external
         view
-        returns (BlocTick.Ticket[] memory)
+        returns (
+            uint256,
+            BlocTick.SuccessfulPurchase[] memory
+        )
     {
-        return ticketManager.getTickets();
+        return (
+            totalSold,
+            ticketManager.getSales()
+        );
     }
 
     function storeTickets(BlocTick.Ticket[] memory tickets, address caller)
