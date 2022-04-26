@@ -4,7 +4,7 @@ pragma solidity >=0.6.0 <0.9.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "../library/TicketManager.sol";
+import "./TicketManager.sol";
 
 contract Event is ERC721URIStorage {
     using Counters for Counters.Counter;
