@@ -39,14 +39,13 @@ contract Event is ERC721URIStorage, ERC721Holder {
         _owner = __owner;
     }
 
-    function purchaseTickets(BlocTick.TicketPurchase[] memory purchases)
-        external
-        payable
-        onlyFactory
-    {
+    function purchaseTickets(
+        BlocTick.TicketPurchase[] memory purchases,
+        uint256 value
+    ) external payable onlyFactory {
         require(saleIsActive);
         require(
-            msg.value >= ticketManager._getTotalCost(purchases),
+            value >= ticketManager.getTotalCost(purchases),
             "The tickets cost more"
         );
         for (uint256 i = 0; i < purchases.length; ) {
@@ -55,7 +54,7 @@ contract Event is ERC721URIStorage, ERC721Holder {
             _mint(address(this), _tokenId);
             tokenCounter.increment();
             _setTokenURI(_tokenId, purchase.tokenURI);
-            _transfer(address(this), msg.sender, _tokenId); //nft to user
+            _transfer(address(this), purchase.buyer, _tokenId); //nft to user
             ticketManager._sales.push(
                 BlocTick.SuccessfulPurchase(
                     purchase.purchaseId,
@@ -75,15 +74,9 @@ contract Event is ERC721URIStorage, ERC721Holder {
     function getInfo()
         external
         view
-        returns (
-            uint256,
-            BlocTick.SuccessfulPurchase[] memory
-        )
+        returns (uint256, BlocTick.SuccessfulPurchase[] memory)
     {
-        return (
-            totalSold,
-            ticketManager.getSales()
-        );
+        return (totalSold, ticketManager.getSales());
     }
 
     function storeTickets(BlocTick.Ticket[] memory tickets, address caller)

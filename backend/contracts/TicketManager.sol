@@ -29,16 +29,18 @@ library TicketManager {
         Manager storage manager,
         BlocTick.Ticket[] memory tickets
     ) external {
-        for (uint8 i = 0; i < tickets.length; ) {
+        for (uint256 i = 0; i < tickets.length; ) {
             BlocTick.Ticket memory ticket = tickets[i];
             if (
-                ticket.ticket_type < BlocTick.TicketType.Free &&
+                ticket.ticket_type < BlocTick.TicketType.Free ||
                 ticket.ticket_type > BlocTick.TicketType.Donation
             ) {
                 ticket.ticket_type = BlocTick.TicketType.Free;
             }
             if (ticket.ticket_type == BlocTick.TicketType.Free) {
                 ticket.price = 0;
+            } else {
+                ticket.price = 1 ether * ticket.price;
             }
             manager._tickets.push(ticket);
             unchecked {
@@ -47,11 +49,12 @@ library TicketManager {
         }
     }
 
-    function _getTotalCost(
+    function getTotalCost(
         Manager storage manager,
         BlocTick.TicketPurchase[] memory purchases
-    ) internal view returns (uint256 total) {
-        for (uint8 i = 0; i < purchases.length; ) {
+    ) public view returns (uint256) {
+        uint256 total = 0;
+        for (uint256 i = 0; i < purchases.length; ) {
             BlocTick.Ticket memory ticket = manager._tickets[
                 purchases[i].ticketId
             ];
