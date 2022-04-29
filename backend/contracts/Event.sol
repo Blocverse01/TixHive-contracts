@@ -4,10 +4,12 @@ pragma solidity >=0.6.0 <0.9.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
 import "./TicketManager.sol";
 import "./BlocTick.sol";
 
-contract Event is ERC721URIStorage {
+contract Event is ERC721URIStorage, ERC721Holder {
     using Counters for Counters.Counter;
     using TicketManager for TicketManager.Manager;
     Counters.Counter private tokenCounter;
@@ -70,7 +72,7 @@ contract Event is ERC721URIStorage {
         totalSold += msg.value;
     }
 
-    function getEventInfo()
+    function getInfo()
         external
         view
         returns (uint256, BlocTick.SuccessfulPurchase[] memory)
