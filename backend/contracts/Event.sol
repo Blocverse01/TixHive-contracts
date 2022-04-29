@@ -50,10 +50,10 @@ contract Event is ERC721URIStorage {
         for (uint256 i = 0; i < purchases.length; ) {
             BlocTick.TicketPurchase memory purchase = purchases[i];
             uint256 _tokenId = tokenCounter.current();
-            _safeMint(address(this), _tokenId);
+            _mint(address(this), _tokenId);
             tokenCounter.increment();
             _setTokenURI(_tokenId, purchase.tokenURI);
-            safeTransferFrom(address(this), purchase.buyer, _tokenId); //nft to user
+            _transfer(address(this), msg.sender, _tokenId); //nft to user
             ticketManager._sales.push(
                 BlocTick.SuccessfulPurchase(
                     purchase.purchaseId,
@@ -70,12 +70,18 @@ contract Event is ERC721URIStorage {
         totalSold += msg.value;
     }
 
-    function getEventInfo()
+    function getInfo()
         external
         view
-        returns (uint256, BlocTick.SuccessfulPurchase[] memory)
+        returns (
+            uint256,
+            BlocTick.SuccessfulPurchase[] memory
+        )
     {
-        return (totalSold, ticketManager.getSales());
+        return (
+            totalSold,
+            ticketManager.getSales()
+        );
     }
 
     function storeTickets(BlocTick.Ticket[] memory tickets, address caller)
@@ -94,7 +100,7 @@ contract Event is ERC721URIStorage {
         saleIsActive = false;
     }
 
-    function getMyTickets(address caller)
+    function getTickets(address caller)
         external
         view
         returns (BlocTick.SuccessfulPurchase[] memory result)
