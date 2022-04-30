@@ -30,8 +30,6 @@ library TicketManager {
             }
             if (ticket.ticket_type == BlocTick.TicketType.Free) {
                 ticket.price = 0;
-            } else {
-                ticket.price = 1 ether * ticket.price;
             }
             manager._tickets.push(ticket);
             unchecked {

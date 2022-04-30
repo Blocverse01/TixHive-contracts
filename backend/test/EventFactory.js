@@ -38,13 +38,13 @@ contract('EventFactory', ([contractOwner, secondAddress, thirdAddress]) => {
                 description: "Ticket For VIPS",
                 ticket_type: 1,
                 quantity_available: 1000,
-                price: 1
+                price: utils.parseEther("1.0")
             }, {
                 name: "VIP 2",
                 description: "Ticket For Bigger VIPS",
                 ticket_type: 1,
                 quantity_available: 1000,
-                price: 2
+                price: utils.parseEther("2.0")
             }]
             await eventFactory.addEvent('Web 3 Ladies', 'W3L', tickets, { from: secondAddress })
             // `from` helps us identify by any address in the test

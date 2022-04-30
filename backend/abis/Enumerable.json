@@ -2999,9 +2999,17 @@
     "name": "solc",
     "version": "0.8.13+commit.abaa5c0e.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "80001": {
+      "events": {},
+      "links": {},
+      "address": "0x9b39f13192BF39Bc9Edba203A4Ed435d21a6B99C",
+      "transactionHash": "0xac40eec18ab10ad684b36261f13a05448db212e882527b272da10793be36f037"
+    }
+  },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-04-30T05:00:19.011Z",
+  "updatedAt": "2022-04-30T08:38:51.453Z",
+  "networkType": "ethereum",
   "devdoc": {
     "details": "This implements an optional extension of {ERC721} defined in the EIP that adds enumerability of all the token ids in the contract as well as all token ids owned by each account.",
     "kind": "dev",

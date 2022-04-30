@@ -9794,12 +9794,13 @@
     "80001": {
       "events": {},
       "links": {},
-      "address": "0xa8Da340E3Ac704a13AA04E20F4fa620be897B1CB",
-      "transactionHash": "0x370c85da3a7c784faef0e48c05166c4dd422aa06948eaae0cc4047d91b68e0c0"
+      "address": "0x9D0318B3CB90322449A7a6E7043658a1Db6C5d88",
+      "transactionHash": "0xa51c63c18a00a8c21706a4567de4db0651679379defdf3bdc078b2bc520f1775"
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-04-30T05:01:07.035Z",
+  "updatedAt": "2022-04-30T08:38:51.444Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},
