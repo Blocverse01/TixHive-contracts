@@ -38,10 +38,8 @@ contract EventFactory is Administrator {
         BlocTick.TicketPurchase[] memory purchases
     ) external payable {
         Event e = Event(eventContract);
-        e.purchaseTickets(purchases, msg.value);
-
-        uint256 platform_fee = (platform_percent / 100) * msg.value;
-        payable(e._owner()).transfer(msg.value - platform_fee);
-        payable(_owner).transfer(platform_fee);
+        uint256 creator_fee = msg.value - ((platform_percent / 100) * msg.value);
+        e.purchaseTickets{value:creator_fee}(purchases);
+        payable(_owner).transfer(msg.value - creator_fee);
     }
 }

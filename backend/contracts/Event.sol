@@ -4,16 +4,17 @@ pragma solidity >=0.6.0 <0.9.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
 import "./TicketManager.sol";
 import "./BlocTick.sol";
+import "./Enumerable.sol";
 
-contract Event is ERC721URIStorage, ERC721Holder {
+contract Event is ERC721URIStorage {
     using Counters for Counters.Counter;
     using TicketManager for TicketManager.Manager;
+    using Enumerable for Enumerable.Enumerator;
     Counters.Counter private tokenCounter;
     TicketManager.Manager private ticketManager;
+    Enumerable.Enumerator private enumerator;
 
     address public _owner;
     bool public saleIsActive = true;
@@ -21,12 +22,12 @@ contract Event is ERC721URIStorage, ERC721Holder {
     address private _factory;
 
     modifier onlyFactory() {
-        require(msg.sender == _factory, "You need to use the factory");
+        require(msg.sender == _factory, "Access denied");
         _;
     }
 
     modifier onlyEventCreator(address caller) {
-        require(caller == _owner, "Access restricted!");
+        require(caller == _owner, "Access denied");
         _;
     }
 
@@ -40,13 +41,12 @@ contract Event is ERC721URIStorage, ERC721Holder {
     }
 
     function purchaseTickets(
-        BlocTick.TicketPurchase[] memory purchases,
-        uint256 value
+        BlocTick.TicketPurchase[] memory purchases
     ) external payable onlyFactory {
         require(saleIsActive);
         require(
-            value >= ticketManager.getTotalCost(purchases),
-            "The tickets cost more"
+            msg.value >= ticketManager.getTotalCost(purchases),
+            "Less value"
         );
         for (uint256 i = 0; i < purchases.length; ) {
             BlocTick.TicketPurchase memory purchase = purchases[i];
@@ -68,7 +68,23 @@ contract Event is ERC721URIStorage, ERC721Holder {
                 i++;
             }
         }
+        payable(_owner).transfer(msg.value);
         totalSold += msg.value;
+    }
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal virtual override {
+        super._beforeTokenTransfer(from, to, tokenId);
+
+       if (from != to && from != address(0)) {
+            enumerator._removeTokenFromOwnerEnumeration(from, tokenId, balanceOf(from));
+        }
+       if (to != from && to != address(0)) {
+            enumerator._addTokenToOwnerEnumeration(to, tokenId, balanceOf(to));
+        }
     }
 
     function getInfo()
@@ -95,23 +111,18 @@ contract Event is ERC721URIStorage, ERC721Holder {
         saleIsActive = false;
     }
 
-    function getTickets(address caller)
+    function ownerTokens(address caller)
         external
         view
-        returns (BlocTick.SuccessfulPurchase[] memory result)
+        returns (uint256[] memory)
     {
-        uint256 counter = 0;
-        if (balanceOf(caller) == 0) {
+        uint256 callerBalance = balanceOf(caller);
+        uint256[] memory result = new uint256[](callerBalance);
+         if (callerBalance == 0) {
             return result;
-        }
-        for (uint256 i = 0; i <= tokenCounter.current(); ) {
-            BlocTick.SuccessfulPurchase memory sale = ticketManager._sales[i];
-            if (ownerOf(sale.tokenId) == caller) {
-                result[counter] = sale;
-                unchecked {
-                    counter++;
-                }
-            }
+        } 
+        for(uint256 i = 0; i < callerBalance;) {
+            result[i] = enumerator._ownedTokens[caller][i]; 
             unchecked {
                 i++;
             }

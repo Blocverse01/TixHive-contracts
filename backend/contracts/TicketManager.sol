@@ -8,15 +8,6 @@ library TicketManager {
         BlocTick.Ticket[] _tickets;
         BlocTick.SuccessfulPurchase[] _sales;
     }
-
-    function getTickets(Manager storage manager)
-        external
-        view
-        returns (BlocTick.Ticket[] storage)
-    {
-        return manager._tickets;
-    }
-
     function getSales(Manager storage manager)
         external
         view
@@ -52,8 +43,7 @@ library TicketManager {
     function getTotalCost(
         Manager storage manager,
         BlocTick.TicketPurchase[] memory purchases
-    ) public view returns (uint256) {
-        uint256 total = 0;
+    ) public view returns (uint256 total) {
         for (uint256 i = 0; i < purchases.length; ) {
             BlocTick.Ticket memory ticket = manager._tickets[
                 purchases[i].ticketId

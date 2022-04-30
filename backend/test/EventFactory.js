@@ -31,7 +31,7 @@ contract('EventFactory', ([contractOwner, secondAddress, thirdAddress]) => {
 
     describe('event', () => {
         // check if event gets created, check if addEvent works
-        it('creates event', async () => {
+        it('creates event with multiple tickets', async () => {
             // set tickets and create event
             const tickets = [{
                 name: "VIP",
@@ -52,6 +52,30 @@ contract('EventFactory', ([contractOwner, secondAddress, thirdAddress]) => {
             // check new event
             const createdEvent = await eventFactory._events(0)
             assert.isDefined(createdEvent)
+        })
+        it('event creator can close sale', async () => {
+            const eventAddress = await eventFactory._events(0)
+            const event = await Event.at(eventAddress)
+            await event.closeSale({ from: secondAddress })
+            const saleIsActive = await event.saleIsActive()
+            assert.equal(saleIsActive, false)
+        })
+        it('event creator can open sale', async () => {
+            const eventAddress = await eventFactory._events(0)
+            const event = await Event.at(eventAddress)
+            await event.openSale({ from: secondAddress })
+            const saleIsActive = await event.saleIsActive()
+            assert.equal(saleIsActive, true)
+        })
+        it('only event creator can open sale', async () => {
+            const eventAddress = await eventFactory._events(0)
+            const event = await Event.at(eventAddress)
+            await event.openSale({ from: thirdAddress }).should.be.rejected
+        })
+        it('only event creator can close sale', async () => {
+            const eventAddress = await eventFactory._events(0)
+            const event = await Event.at(eventAddress)
+            await event.closeSale({ from: thirdAddress }).should.be.rejected
         })
     })
 
@@ -81,11 +105,22 @@ contract('EventFactory', ([contractOwner, secondAddress, thirdAddress]) => {
             const ownerBalance = await eventContract.balanceOf(thirdAddress);
             assert.isAbove(ownerBalance.toNumber(), 0);
         })
+
+        it('can read ticket sales info', async () => {
+            const eventAddress = await eventFactory._events(0);
+            const event = await Event.at(eventAddress);
+            const info = await event.getInfo();
+            const totalSold = info['0'];
+            const sales = info['1'];
+            const callerTickets = await event.ownerTokens(thirdAddress)
+            assert.isDefined(totalSold.toString());
+            assert.isDefined(sales);
+            assert.isNotEmpty(callerTickets);
+        })
     })
 
     describe('platform_percent', () => {
         it('sets platform_percent', async () => {
-            console.log(await eventFactory._owner(), contractOwner)
             await eventFactory.setPlatformPercent(50, { from: contractOwner });
         })
 
