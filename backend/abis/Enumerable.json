@@ -3000,15 +3000,21 @@
     "version": "0.8.13+commit.abaa5c0e.Emscripten.clang"
   },
   "networks": {
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0xa06a4E60c6BaFFdc095efBdd80EB3D7FE8e933d6",
+      "transactionHash": "0xae9de5077c75079f359af6eda113885c88f70be7de5ea4a718289505faa34111"
+    },
     "80001": {
       "events": {},
       "links": {},
-      "address": "0x9b39f13192BF39Bc9Edba203A4Ed435d21a6B99C",
-      "transactionHash": "0xac40eec18ab10ad684b36261f13a05448db212e882527b272da10793be36f037"
+      "address": "0xEDCf58d25f5c0642572e1C4B8bB04A505817C88B",
+      "transactionHash": "0xe70d478b59c3a19e47af9bde42d7d3771828777be46b373623babf4aebd14877"
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-04-30T08:38:51.453Z",
+  "updatedAt": "2022-04-30T14:57:07.383Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "This implements an optional extension of {ERC721} defined in the EIP that adds enumerability of all the token ids in the contract as well as all token ids owned by each account.",

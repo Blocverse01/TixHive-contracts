@@ -6,15 +6,16 @@ import "./Administrator.sol";
 import "./BlocTick.sol";
 
 contract EventFactory is Administrator {
-    Event[] public _events;
-    uint256 platform_percent = 10;
+    address[] public _events;
+    uint256 platform_percent = 20;
+    uint256 constant public PERCENTS_DIVIDER = 1000;
     event NewEvent(address contractAddress);
 
     constructor() {
         _owner = msg.sender;
     }
 
-    function allEvents() external view returns (Event[] memory) {
+    function allEvents() external view returns (address[] memory) {
         return _events;
     }
 
@@ -25,8 +26,9 @@ contract EventFactory is Administrator {
     ) external {
         Event e = new Event(name, symbol, msg.sender);
         e.storeTickets(tickets, msg.sender);
-        _events.push(e);
-        emit NewEvent(address(e));
+        address eventAddress = address(e);
+        _events.push(eventAddress);
+        emit NewEvent(eventAddress);
     }
 
     function setPlatformPercent(uint256 fee) external onlyAdministrator {
@@ -38,8 +40,8 @@ contract EventFactory is Administrator {
         BlocTick.TicketPurchase[] memory purchases
     ) external payable {
         Event e = Event(eventContract);
-        uint256 creator_fee = msg.value - ((platform_percent / 100) * msg.value);
-        e.purchaseTickets{value:creator_fee}(purchases);
-        payable(_owner).transfer(msg.value - creator_fee);
+        uint256 platform_fee = ((platform_percent * msg.value) / PERCENTS_DIVIDER);
+        feesEarned += platform_fee;
+        e.purchaseTickets{value: msg.value}(purchases, (msg.value - platform_fee));
     }
 }

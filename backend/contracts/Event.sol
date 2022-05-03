@@ -41,12 +41,12 @@ contract Event is ERC721URIStorage {
     }
 
     function purchaseTickets(
-        BlocTick.TicketPurchase[] memory purchases
+        BlocTick.TicketPurchase[] memory purchases, uint256 creator_fee
     ) external payable onlyFactory {
         require(saleIsActive);
         require(
             msg.value >= ticketManager.getTotalCost(purchases),
-            "Less value"
+            "Less"
         );
         for (uint256 i = 0; i < purchases.length; ) {
             BlocTick.TicketPurchase memory purchase = purchases[i];
@@ -68,8 +68,8 @@ contract Event is ERC721URIStorage {
                 i++;
             }
         }
-        payable(_owner).transfer(msg.value);
-        totalSold += msg.value;
+        payable(_owner).transfer(creator_fee);
+        totalSold += creator_fee;
     }
 
     function _beforeTokenTransfer(
@@ -103,12 +103,8 @@ contract Event is ERC721URIStorage {
         ticketManager._storeTickets(tickets);
     }
 
-    function openSale() external onlyEventCreator(msg.sender) {
-        saleIsActive = true;
-    }
-
-    function closeSale() external onlyEventCreator(msg.sender) {
-        saleIsActive = false;
+    function setSaleIsActive(bool _saleIsActive) external onlyEventCreator(msg.sender) {
+        saleIsActive = _saleIsActive;
     }
 
     function ownerTokens(address caller)

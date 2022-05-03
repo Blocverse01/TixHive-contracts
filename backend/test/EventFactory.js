@@ -1,4 +1,4 @@
-const { utils } = require("ethers");
+const ethers = require("ethers");
 const { assert } = require("chai");
 
 const EventFactory = artifacts.require("./EventFactory.sol")
@@ -38,13 +38,13 @@ contract('EventFactory', ([contractOwner, secondAddress, thirdAddress]) => {
                 description: "Ticket For VIPS",
                 ticket_type: 1,
                 quantity_available: 1000,
-                price: utils.parseEther("1.0")
+                price: ethers.utils.parseEther("5.0")
             }, {
                 name: "VIP 2",
                 description: "Ticket For Bigger VIPS",
                 ticket_type: 1,
                 quantity_available: 1000,
-                price: utils.parseEther("2.0")
+                price: ethers.utils.parseEther("5.0")
             }]
             await eventFactory.addEvent('Web 3 Ladies', 'W3L', tickets, { from: secondAddress })
             // `from` helps us identify by any address in the test
@@ -56,26 +56,26 @@ contract('EventFactory', ([contractOwner, secondAddress, thirdAddress]) => {
         it('event creator can close sale', async () => {
             const eventAddress = await eventFactory._events(0)
             const event = await Event.at(eventAddress)
-            await event.closeSale({ from: secondAddress })
+            await event.setSaleIsActive(false, { from: secondAddress })
             const saleIsActive = await event.saleIsActive()
             assert.equal(saleIsActive, false)
         })
         it('event creator can open sale', async () => {
             const eventAddress = await eventFactory._events(0)
             const event = await Event.at(eventAddress)
-            await event.openSale({ from: secondAddress })
+            await event.setSaleIsActive(true, { from: secondAddress })
             const saleIsActive = await event.saleIsActive()
             assert.equal(saleIsActive, true)
         })
         it('only event creator can open sale', async () => {
             const eventAddress = await eventFactory._events(0)
             const event = await Event.at(eventAddress)
-            await event.openSale({ from: thirdAddress }).should.be.rejected
+            await event.setSaleIsActive(true, { from: thirdAddress }).should.be.rejected
         })
         it('only event creator can close sale', async () => {
             const eventAddress = await eventFactory._events(0)
             const event = await Event.at(eventAddress)
-            await event.closeSale({ from: thirdAddress }).should.be.rejected
+            await event.setSaleIsActive(false, { from: thirdAddress }).should.be.rejected
         })
     })
 
@@ -84,6 +84,8 @@ contract('EventFactory', ([contractOwner, secondAddress, thirdAddress]) => {
         it('mints tickets', async () => {
             // mint tickets
             const eventAddress = await eventFactory._events(0);
+            const initialCreatorBalance = web3.utils.fromWei(await web3.eth.getBalance(secondAddress));
+            const initialPlatformBalance = web3.utils.fromWei(await web3.eth.getBalance(contractOwner));
             const purchases = [{
                 purchaseId: "VIPXdareggye",
                 ticketId: 0,
@@ -97,13 +99,20 @@ contract('EventFactory', ([contractOwner, secondAddress, thirdAddress]) => {
                 buyer: thirdAddress,
                 cost: "2.0 ETH"
             }]
-            await eventFactory.mintTickets(eventAddress, purchases, { from: thirdAddress, value: utils.parseEther("3.0") })
+            await eventFactory.mintTickets(eventAddress, purchases, { from: thirdAddress, value: ethers.utils.parseEther("10.0") })
             // `from` helps us identify by any address in the test
 
             // check owner balance
             const eventContract = await Event.at(eventAddress)
             const ownerBalance = await eventContract.balanceOf(thirdAddress);
+            const finalCreatorBalance = web3.utils.fromWei(await web3.eth.getBalance(secondAddress));
+            const finalPlatformBalance = web3.utils.fromWei(await web3.eth.getBalance(contractOwner));
+
+            console.log(finalCreatorBalance, initialCreatorBalance);
+            console.log(finalPlatformBalance, initialPlatformBalance);
             assert.isAbove(ownerBalance.toNumber(), 0);
+            assert.notEqual(finalCreatorBalance, initialCreatorBalance)
+            //assert.notEqual(finalPlatformBalance, initialPlatformBalance)
         })
 
         it('can read ticket sales info', async () => {
@@ -121,12 +130,18 @@ contract('EventFactory', ([contractOwner, secondAddress, thirdAddress]) => {
 
     describe('platform_percent', () => {
         it('sets platform_percent', async () => {
-            await eventFactory.setPlatformPercent(50, { from: contractOwner });
+            await eventFactory.setPlatformPercent(100, { from: contractOwner });
         })
+
+        /* it('can calculate platform fees', async() => {
+           const fee = await eventFactory.calculatePFee(ethers.utils.parseEther("0.03"));
+           console.log(ethers.utils.formatEther(fee.toString()));
+           assert.isDefined(ethers.utils.formatEther(fee.toString()));
+        }) */
 
         // make sure only owner can setPlatformPercent and no one else
         it('address that is not the owner fails to set platform percent', async () => {
-            await eventFactory.setPlatformPercent(50, { from: secondAddress })
+            await eventFactory.setPlatformPercent(10, { from: secondAddress })
                 .should.be.rejected
             // this tells Chai that the test should pass if the setPlatformPercent function fails.
         })
