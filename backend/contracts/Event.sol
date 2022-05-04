@@ -41,11 +41,12 @@ contract Event is ERC721URIStorage {
     }
 
     function purchaseTickets(
-        BlocTick.TicketPurchase[] memory purchases, uint256 creator_fee
+        BlocTick.TicketPurchase[] memory purchases,
+        uint256 platform_fee
     ) external payable onlyFactory {
         require(saleIsActive);
         require(
-            msg.value >= ticketManager.getTotalCost(purchases),
+            msg.value + platform_fee >= ticketManager.getTotalCost(purchases),
             "Less"
         );
         for (uint256 i = 0; i < purchases.length; ) {
@@ -68,8 +69,8 @@ contract Event is ERC721URIStorage {
                 i++;
             }
         }
-        payable(_owner).transfer(creator_fee);
-        totalSold += creator_fee;
+        payable(_owner).transfer(msg.value);
+        totalSold += msg.value;
     }
 
     function _beforeTokenTransfer(
@@ -79,10 +80,14 @@ contract Event is ERC721URIStorage {
     ) internal virtual override {
         super._beforeTokenTransfer(from, to, tokenId);
 
-       if (from != to && from != address(0)) {
-            enumerator._removeTokenFromOwnerEnumeration(from, tokenId, balanceOf(from));
+        if (from != to && from != address(0)) {
+            enumerator._removeTokenFromOwnerEnumeration(
+                from,
+                tokenId,
+                balanceOf(from)
+            );
         }
-       if (to != from && to != address(0)) {
+        if (to != from && to != address(0)) {
             enumerator._addTokenToOwnerEnumeration(to, tokenId, balanceOf(to));
         }
     }
@@ -103,7 +108,10 @@ contract Event is ERC721URIStorage {
         ticketManager._storeTickets(tickets);
     }
 
-    function setSaleIsActive(bool _saleIsActive) external onlyEventCreator(msg.sender) {
+    function setSaleIsActive(bool _saleIsActive)
+        external
+        onlyEventCreator(msg.sender)
+    {
         saleIsActive = _saleIsActive;
     }
 
@@ -114,11 +122,11 @@ contract Event is ERC721URIStorage {
     {
         uint256 callerBalance = balanceOf(caller);
         uint256[] memory result = new uint256[](callerBalance);
-         if (callerBalance == 0) {
+        if (callerBalance == 0) {
             return result;
-        } 
-        for(uint256 i = 0; i < callerBalance;) {
-            result[i] = enumerator._ownedTokens[caller][i]; 
+        }
+        for (uint256 i = 0; i < callerBalance; ) {
+            result[i] = enumerator._ownedTokens[caller][i];
             unchecked {
                 i++;
             }

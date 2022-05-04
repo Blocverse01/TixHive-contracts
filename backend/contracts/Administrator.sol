@@ -2,14 +2,14 @@
 pragma solidity >=0.6.0 <0.9.0;
 
 abstract contract Administrator {
-    address public _owner;
-    uint256 public feesEarned;
-    modifier onlyAdministrator() {
-        require(msg.sender == _owner, "No Access");
-        _;
+    address payable internal _owner;
+
+    constructor() {
+        _owner = payable(msg.sender);
     }
 
-    function withdraw() external onlyAdministrator {
-        payable(msg.sender).transfer(feesEarned);
+    modifier onlyAdministrator() {
+        require(payable(msg.sender) == _owner, "No access");
+        _;
     }
 }

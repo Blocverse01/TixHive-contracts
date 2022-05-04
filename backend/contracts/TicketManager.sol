@@ -43,7 +43,7 @@ library TicketManager {
         BlocTick.TicketPurchase[] memory purchases
     ) public view returns (uint256 total) {
         for (uint256 i = 0; i < purchases.length; ) {
-            BlocTick.Ticket memory ticket = manager._tickets[
+            BlocTick.Ticket storage ticket = manager._tickets[
                 purchases[i].ticketId
             ];
             if (ticket.ticket_type == BlocTick.TicketType.Donation) {
