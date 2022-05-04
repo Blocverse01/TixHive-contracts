@@ -9459,12 +9459,13 @@
     "80001": {
       "events": {},
       "links": {},
-      "address": "0x9f8563eBBe36D57e36A32EBF45842795f2fCA3b2",
-      "transactionHash": "0x3261c417eb75d69b68e838a3f0ca7187e750a3c01740551ca6af800e5a9052f3"
+      "address": "0x904b635Db907B78413ECA7a9d141bd5A486cf22f",
+      "transactionHash": "0x00b1d67f85991d22676b247bc14922f8e9b2c95cd956927d5d00ad502d6eba52"
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-05-04T09:14:47.743Z",
+  "updatedAt": "2022-05-04T10:28:12.291Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

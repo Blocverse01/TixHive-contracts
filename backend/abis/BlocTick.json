@@ -554,12 +554,13 @@
     "80001": {
       "events": {},
       "links": {},
-      "address": "0xc7A006F04d3388c0cbBBDB9c6E1b8bF80e81C264",
-      "transactionHash": "0x70ed0c87b67ae3d9097b8c2164c84565b3dee8892e90bfcbf0aea628577b41fd"
+      "address": "0xBA427294c61c9d48D90887D32e564553947ae779",
+      "transactionHash": "0x58ec069601c697bd0a95bf6be479db029198951d49c4e1e43741d6481d1d8f53"
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-05-03T16:55:34.201Z",
+  "updatedAt": "2022-05-04T10:28:12.294Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},
