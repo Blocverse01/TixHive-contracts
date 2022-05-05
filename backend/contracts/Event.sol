@@ -52,10 +52,9 @@ contract Event is ERC721URIStorage {
         for (uint256 i = 0; i < purchases.length; ) {
             BlocTick.TicketPurchase memory purchase = purchases[i];
             uint256 _tokenId = tokenCounter.current();
-            _mint(address(this), _tokenId);
+            _mint(purchase.buyer, _tokenId);
             tokenCounter.increment();
             _setTokenURI(_tokenId, purchase.tokenURI);
-            _transfer(address(this), purchase.buyer, _tokenId); //nft to user
             ticketManager._sales.push(
                 BlocTick.SuccessfulPurchase(
                     purchase.purchaseId,
