@@ -20,7 +20,7 @@ module.exports = {
       provider: () => new HDWalletProvider(privateKeys.split(","), `https://matic-mumbai.chainstacklabs.com`),
       network_id: 80001,
       confirmations: 2,
-      timeoutBlocks: 2000,
+      timeoutBlocks: 50,
       skipDryRun: true,
     },
     kovan: {
@@ -79,30 +79,33 @@ module.exports = {
         ),
       network_id: 80001,
       confirmations: 2,
-      timeoutBlocks: 2000,
+      timeoutBlocks: 50,
       skipDryRun: true,
     },
 
     matic_mainnet: {
-      provider: () => new HDWalletProvider(privateKeys.split(","), `https://rpc-mainnet.maticvigil.com`),
+      provider: () => new HDWalletProvider(privateKeys.split(","), `https://polygon-rpc.com`),
       network_id: 137,
       confirmations: 2,
-      timeoutBlocks: 2000,
+      timeoutBlocks: 50,
       skipDryRun: true,
+      gas: 6721975,
+      gasPrice: 60000000000,
+      networkCheckTimeout: 10000,
     },
 
     bsc_testnet: {
       provider: () => new HDWalletProvider(privateKeys.split(","), `https://data-seed-prebsc-2-s2.binance.org:8545`),
       network_id: 97,
       confirmations: 10,
-      timeoutBlocks: 80000,
+      timeoutBlocks: 50,
       skipDryRun: true,
     },
     bsc_mainnet: {
       provider: () => new HDWalletProvider(privateKeys.split(","), `wss://bsc-dataseed4.binance.org`),
       network_id: 56,
       confirmations: 10,
-      timeoutBlocks: 3000,
+      timeoutBlocks: 50,
       skipDryRun: true,
     },
     development: {
