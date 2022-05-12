@@ -8,13 +8,6 @@ library TicketManager {
         BlocTick.Ticket[] _tickets;
         BlocTick.SuccessfulPurchase[] _sales;
     }
-    function getSales(Manager storage manager)
-        external
-        view
-        returns (BlocTick.SuccessfulPurchase[] storage)
-    {
-        return manager._sales;
-    }
 
     function _storeTickets(
         Manager storage manager,
@@ -36,6 +29,20 @@ library TicketManager {
                 i++;
             }
         }
+    }
+
+    function stillAvailable(Manager storage manager, uint256 ticketId)
+        internal
+        view
+    {
+        require(
+            manager._tickets[ticketId].quantity_available > 0,
+            "TICKET_SOLD_OUT"
+        );
+    }
+
+    function reduceQty(Manager storage manager, uint256 ticketId) internal {
+        manager._tickets[ticketId].quantity_available -= 1;
     }
 
     function getTotalCost(

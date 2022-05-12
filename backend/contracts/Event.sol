@@ -1,20 +1,24 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.6.0 <0.9.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./TicketManager.sol";
 import "./BlocTick.sol";
-import "./Enumerable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 
-contract Event is ERC721URIStorage {
+contract Event is
+    ERC721URIStorageUpgradeable,
+    OwnableUpgradeable,
+    ERC721EnumerableUpgradeable
+{
     using Counters for Counters.Counter;
     using TicketManager for TicketManager.Manager;
-    using Enumerable for Enumerable.Enumerator;
     Counters.Counter private tokenCounter;
     TicketManager.Manager private ticketManager;
-    Enumerable.Enumerator private enumerator;
 
     address public _owner;
     bool public saleIsActive = true;
@@ -22,22 +26,25 @@ contract Event is ERC721URIStorage {
     address private _factory;
 
     modifier onlyFactory() {
-        require(msg.sender == _factory, "Access denied");
+        require(msg.sender == _factory, "ERR_ACCESS");
         _;
     }
 
     modifier onlyEventCreator(address caller) {
-        require(caller == _owner, "Access denied");
+        require(caller == _owner, "ERR_ACCESS");
         _;
     }
 
-    constructor(
+    function initialize(
         string memory name,
         string memory symbol,
         address __owner
-    ) ERC721(name, symbol) {
+    ) public initializer {
         _factory = msg.sender;
         _owner = __owner;
+        __ERC721_init(name, symbol);
+         __Ownable_init();
+        transferOwnership(__owner);
     }
 
     function purchaseTickets(
@@ -47,12 +54,14 @@ contract Event is ERC721URIStorage {
         require(saleIsActive);
         require(
             msg.value + platform_fee >= ticketManager.getTotalCost(purchases),
-            "Less"
+            "ERR_UNDERPRICED"
         );
         for (uint256 i = 0; i < purchases.length; ) {
             BlocTick.TicketPurchase memory purchase = purchases[i];
+            ticketManager.stillAvailable(purchase.ticketId);
             uint256 _tokenId = tokenCounter.current();
             _mint(purchase.buyer, _tokenId);
+            ticketManager.reduceQty(purchase.ticketId);
             tokenCounter.increment();
             _setTokenURI(_tokenId, purchase.tokenURI);
             ticketManager._sales.push(
@@ -76,27 +85,41 @@ contract Event is ERC721URIStorage {
         address from,
         address to,
         uint256 tokenId
-    ) internal virtual override {
+    ) internal override(ERC721Upgradeable, ERC721EnumerableUpgradeable) {
         super._beforeTokenTransfer(from, to, tokenId);
+    }
 
-        if (from != to && from != address(0)) {
-            enumerator._removeTokenFromOwnerEnumeration(
-                from,
-                tokenId,
-                balanceOf(from)
-            );
-        }
-        if (to != from && to != address(0)) {
-            enumerator._addTokenToOwnerEnumeration(to, tokenId, balanceOf(to));
-        }
+    function _burn(uint256 tokenId)
+        internal
+        override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
+    {
+        super._burn(tokenId);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 
     function getInfo()
         external
         view
-        returns (uint256, BlocTick.SuccessfulPurchase[] memory)
+        returns (uint256, BlocTick.SuccessfulPurchase[] memory, BlocTick.Ticket[] memory)
     {
-        return (totalSold, ticketManager.getSales());
+        return (totalSold, ticketManager._sales, ticketManager._tickets);
     }
 
     function storeTickets(BlocTick.Ticket[] memory tickets, address caller)
@@ -107,10 +130,7 @@ contract Event is ERC721URIStorage {
         ticketManager._storeTickets(tickets);
     }
 
-    function setSaleIsActive(bool _saleIsActive)
-        external
-        onlyEventCreator(msg.sender)
-    {
+    function setSaleIsActive(bool _saleIsActive) external onlyOwner {
         saleIsActive = _saleIsActive;
     }
 
@@ -119,13 +139,13 @@ contract Event is ERC721URIStorage {
         view
         returns (uint256[] memory)
     {
-        uint256 callerBalance = balanceOf(caller);
-        uint256[] memory result = new uint256[](callerBalance);
-        if (callerBalance == 0) {
+        uint256 ownerBalance = balanceOf(caller);
+        uint256[] memory result = new uint256[](ownerBalance);
+        if (ownerBalance == 0) {
             return result;
         }
-        for (uint256 i = 0; i < callerBalance; ) {
-            result[i] = enumerator._ownedTokens[caller][i];
+        for (uint256 i = 0; i < ownerBalance; ) {
+            result[i] = tokenOfOwnerByIndex(caller, i);
             unchecked {
                 i++;
             }

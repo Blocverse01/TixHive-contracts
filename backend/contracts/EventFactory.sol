@@ -2,15 +2,21 @@
 pragma solidity >=0.6.0 <0.9.0;
 
 import "./Event.sol";
-import "./Administrator.sol";
 import "./BlocTick.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/proxy/Clones.sol";
 
-contract EventFactory is Administrator {
+contract EventFactory is Ownable {
     Event[] internal _events;
-    uint256 internal platform_percent = 20;
+    address immutable tokenImplementation;
+    uint256 internal platform_percent = 50;
     uint256 private constant PERCENTS_DIVIDER = 1000;
     uint256 public feesEarned;
     event NewEvent(address contractAddress);
+
+    constructor() {
+        tokenImplementation = address(new Event());
+    }
 
     function allEvents() external view returns (Event[] memory) {
         return _events;
@@ -21,13 +27,15 @@ contract EventFactory is Administrator {
         string memory symbol,
         BlocTick.Ticket[] memory tickets
     ) external {
-        Event e = new Event(name, symbol, msg.sender);
+        address clone = Clones.clone(tokenImplementation);
+        Event e = Event(clone);
+        e.initialize(name, symbol, msg.sender);
         e.storeTickets(tickets, msg.sender);
         _events.push(e);
-        emit NewEvent(address(e));
+        emit NewEvent(clone);
     }
 
-    function setPlatformPercent(uint256 fee) external onlyAdministrator {
+    function setPlatformPercent(uint256 fee) external onlyOwner {
         platform_percent = fee;
     }
 
@@ -37,7 +45,7 @@ contract EventFactory is Administrator {
     {
         uint256 platform_fee = ((platform_percent * msg.value) /
             PERCENTS_DIVIDER);
-        _owner.transfer(platform_fee);
+        payable(Ownable.owner()).transfer(platform_fee);
         feesEarned += platform_fee;
         e.purchaseTickets{value: msg.value - platform_fee}(
             purchases,
