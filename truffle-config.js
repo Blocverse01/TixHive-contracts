@@ -84,14 +84,13 @@ module.exports = {
     },
 
     matic_mainnet: {
-      provider: () => new HDWalletProvider(privateKeys.split(","), `https://polygon-rpc.com`),
+      provider: () => new HDWalletProvider(privateKeys.split(","), "https://matic-mainnet.chainstacklabs.com"),
       network_id: 137,
       confirmations: 2,
       timeoutBlocks: 50,
       skipDryRun: true,
-      gas: 6721975,
-      gasPrice: 60000000000,
-      networkCheckTimeout: 10000,
+      gas: 9221081,
+      gasPrice: 250000000000, // 250 gwei
     },
 
     bsc_testnet: {

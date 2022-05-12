@@ -14,8 +14,8 @@ contract EventFactory is Ownable {
     uint256 public feesEarned;
     event NewEvent(address contractAddress);
 
-    constructor() {
-        tokenImplementation = address(new Event());
+    constructor(address _tokenImplementation) {
+        tokenImplementation = _tokenImplementation;
     }
 
     function allEvents() external view returns (Event[] memory) {

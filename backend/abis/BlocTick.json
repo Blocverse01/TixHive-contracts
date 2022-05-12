@@ -10,7 +10,7 @@
   "sourceMap": "69:575:18:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "69:575:18:-:0;;;;;;;;",
   "source": "// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.6.0 <0.9.0;\n\nlibrary BlocTick {\n    struct Ticket {\n        string name;\n        string description;\n        TicketType ticket_type;\n        uint256 quantity_available;\n        uint256 price;\n    }\n    struct SuccessfulPurchase {\n        string purchaseId;\n        address buyer;\n        uint256 tokenId;\n        uint256 ticketId;\n        string cost;\n    }\n    struct TicketPurchase {\n        string purchaseId;\n        uint256 ticketId;\n        string tokenURI;\n        address buyer;\n        string cost;\n    }\n    enum TicketType {\n        Free,\n        Paid,\n        Donation\n    }\n}\n",
-  "sourcePath": "/workspace/blocticks-contracts/backend/contracts/BlocTick.sol",
+  "sourcePath": "/Users/devjosh/Documents/Build/Blocverse/BlocTicks/blocticks-contracts/backend/contracts/BlocTick.sol",
   "ast": {
     "absolutePath": "project:/backend/contracts/BlocTick.sol",
     "exportedSymbols": {
@@ -548,8 +548,8 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xC8dEcA1de4dc7Af5e50CF2B30268b8224E0fCE6B",
-      "transactionHash": "0xa6ac8e98e6354ff8e96d21e0fec94d3c6755a249aa7f6a4e5fb061f57e331328"
+      "address": "0xcF54E3250CB0aE730cF40BBa0F595d69BF235d1b",
+      "transactionHash": "0x786473ff67285d3b7504d86e8e9dee239513b704e03fc481d605b4c77f5f0f6c"
     },
     "80001": {
       "events": {},
@@ -559,7 +559,7 @@
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-05-12T16:42:28.641Z",
+  "updatedAt": "2022-05-12T19:11:22.061Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
