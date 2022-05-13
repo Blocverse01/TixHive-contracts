@@ -9,8 +9,7 @@ import "@openzeppelin/contracts/proxy/Clones.sol";
 contract EventFactory is Ownable {
     Event[] internal _events;
     address immutable tokenImplementation;
-    uint256 internal platform_percent = 50;
-    uint256 private constant PERCENTS_DIVIDER = 1000;
+    uint256 public platform_percent = 50;
     uint256 public feesEarned;
     event NewEvent(address contractAddress);
 
@@ -43,13 +42,6 @@ contract EventFactory is Ownable {
         external
         payable
     {
-        uint256 platform_fee = ((platform_percent * msg.value) /
-            PERCENTS_DIVIDER);
-        payable(Ownable.owner()).transfer(platform_fee);
-        feesEarned += platform_fee;
-        e.purchaseTickets{value: msg.value - platform_fee}(
-            purchases,
-            platform_fee
-        );
+        feesEarned += e.purchaseTickets{value: msg.value}(purchases);
     }
 }

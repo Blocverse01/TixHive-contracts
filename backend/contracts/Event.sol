@@ -9,6 +9,7 @@ import "./BlocTick.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
+import "./EventFactory.sol";
 
 contract Event is
     ERC721URIStorageUpgradeable,
@@ -19,6 +20,7 @@ contract Event is
     using TicketManager for TicketManager.Manager;
     Counters.Counter private tokenCounter;
     TicketManager.Manager private ticketManager;
+    uint256 internal constant PERCENTS_DIVIDER = 1000;
 
     address public _owner;
     bool public saleIsActive = true;
@@ -43,23 +45,48 @@ contract Event is
         _factory = msg.sender;
         _owner = __owner;
         __ERC721_init(name, symbol);
-         __Ownable_init();
+        __Ownable_init();
         transferOwnership(__owner);
     }
 
-    function purchaseTickets(
-        BlocTick.TicketPurchase[] memory purchases,
-        uint256 platform_fee
-    ) external payable onlyFactory {
+    function purchaseTickets(BlocTick.TicketPurchase[] memory purchases)
+        external
+        payable
+        onlyFactory
+        returns (uint256)
+    {
         require(saleIsActive);
-        require(
-            msg.value + platform_fee >= ticketManager.getTotalCost(purchases),
-            "ERR_UNDERPRICED"
-        );
+        uint256 totalCost = ticketManager.getTotalCost(purchases);
+        EventFactory factory = EventFactory(_factory);
+        uint256 feesEarned = 0;
+        require(msg.value >= totalCost, "ERR_INSUFFICIENT_FUNDS");
         for (uint256 i = 0; i < purchases.length; ) {
             BlocTick.TicketPurchase memory purchase = purchases[i];
-            ticketManager.stillAvailable(purchase.ticketId);
+            if (!ticketManager.stillAvailable(purchase.ticketId)) continue;
             uint256 _tokenId = tokenCounter.current();
+            uint256 ticketCost = ticketManager.getCost(purchase.ticketId);
+            uint256 platform_fee = (factory.platform_percent() * ticketCost) /
+                PERCENTS_DIVIDER;
+            uint256 creator_fee = ticketCost - platform_fee;
+            bool shouldPay = false;
+            require(
+                msg.value >= ticketCost ||
+                    ticketManager.isDonation(purchase.ticketId)
+            );
+            if (ticketManager.isPaid(purchase.ticketId)) {
+                shouldPay = true;
+            } else if (
+                ticketManager.isDonation(purchase.ticketId) &&
+                purchase.cost >= ticketCost
+            ) {
+                shouldPay = true;
+            }
+            if (shouldPay) {
+                payable(_owner).transfer(creator_fee);
+                totalSold += creator_fee;
+                payable(factory.owner()).transfer(platform_fee);
+                feesEarned += platform_fee;
+            }
             _mint(purchase.buyer, _tokenId);
             ticketManager.reduceQty(purchase.ticketId);
             tokenCounter.increment();
@@ -77,8 +104,7 @@ contract Event is
                 i++;
             }
         }
-        payable(_owner).transfer(msg.value);
-        totalSold += msg.value;
+        return feesEarned;
     }
 
     function _beforeTokenTransfer(
@@ -117,7 +143,11 @@ contract Event is
     function getInfo()
         external
         view
-        returns (uint256, BlocTick.SuccessfulPurchase[] memory, BlocTick.Ticket[] memory)
+        returns (
+            uint256,
+            BlocTick.SuccessfulPurchase[] memory,
+            BlocTick.Ticket[] memory
+        )
     {
         return (totalSold, ticketManager._sales, ticketManager._tickets);
     }

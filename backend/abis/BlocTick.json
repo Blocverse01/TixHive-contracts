@@ -1,29 +1,29 @@
 {
   "contractName": "BlocTick",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.13+commit.abaa5c0e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/backend/contracts/BlocTick.sol\":\"BlocTick\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/backend/contracts/BlocTick.sol\":{\"keccak256\":\"0xfc642d69ce282eb174da8484dc4cd79263e5340d0ad4a1cccb3428e032c8783a\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://57ecdaf26813a40f65d5b58283d14479310996a9c92524ddc44756a730513e25\",\"dweb:/ipfs/QmWebddtXx63umpLZx7tuo672tiS46XojQbvRomPB6bXgx\"]}},\"version\":1}",
-  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220a710e4bf9ca7480abc5cbf767c7316373165f6e4f66f0278070079766351db3464736f6c634300080d0033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220a710e4bf9ca7480abc5cbf767c7316373165f6e4f66f0278070079766351db3464736f6c634300080d0033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.13+commit.abaa5c0e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/backend/contracts/BlocTick.sol\":\"BlocTick\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/backend/contracts/BlocTick.sol\":{\"keccak256\":\"0xc056bf9d4d3a0644d60e975bb662eb9ab749ee98347b648c24efec936b3c875e\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://600a442e0e64dcc19368725c94ebcf1bea3817c8ddd2f09ee7bf15c0f6e10cbc\",\"dweb:/ipfs/QmfYG82vQ7L74y9TQEayH2uDEEui4inU1n3gBQTZZeyYtk\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220de4a2a38761397290a5f4138f82ba1d527e0960daa224a1d8e320c2dadeb8c2864736f6c634300080d0033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220de4a2a38761397290a5f4138f82ba1d527e0960daa224a1d8e320c2dadeb8c2864736f6c634300080d0033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "69:575:18:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "69:575:18:-:0;;;;;;;;",
-  "source": "// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.6.0 <0.9.0;\n\nlibrary BlocTick {\n    struct Ticket {\n        string name;\n        string description;\n        TicketType ticket_type;\n        uint256 quantity_available;\n        uint256 price;\n    }\n    struct SuccessfulPurchase {\n        string purchaseId;\n        address buyer;\n        uint256 tokenId;\n        uint256 ticketId;\n        string cost;\n    }\n    struct TicketPurchase {\n        string purchaseId;\n        uint256 ticketId;\n        string tokenURI;\n        address buyer;\n        string cost;\n    }\n    enum TicketType {\n        Free,\n        Paid,\n        Donation\n    }\n}\n",
+  "sourceMap": "69:577:33:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "69:577:33:-:0;;;;;;;;",
+  "source": "// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.6.0 <0.9.0;\n\nlibrary BlocTick {\n    struct Ticket {\n        string name;\n        string description;\n        TicketType ticket_type;\n        uint256 quantity_available;\n        uint256 price;\n    }\n    struct SuccessfulPurchase {\n        string purchaseId;\n        address buyer;\n        uint256 tokenId;\n        uint256 ticketId;\n        uint256 cost;\n    }\n    struct TicketPurchase {\n        string purchaseId;\n        uint256 ticketId;\n        string tokenURI;\n        address buyer;\n        uint256 cost;\n    }\n    enum TicketType {\n        Free,\n        Paid,\n        Donation\n    }\n}\n",
   "sourcePath": "/Users/devjosh/Documents/Build/Blocverse/BlocTicks/blocticks-contracts/backend/contracts/BlocTick.sol",
   "ast": {
     "absolutePath": "project:/backend/contracts/BlocTick.sol",
     "exportedSymbols": {
       "BlocTick": [
-        2720
+        5193
       ]
     },
-    "id": 2721,
+    "id": 5194,
     "license": "GPL-3.0",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2681,
+        "id": 5154,
         "literals": [
           "solidity",
           ">=",
@@ -34,7 +34,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "36:31:18"
+        "src": "36:31:33"
       },
       {
         "abstract": false,
@@ -43,27 +43,27 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 2720,
+        "id": 5193,
         "linearizedBaseContracts": [
-          2720
+          5193
         ],
         "name": "BlocTick",
-        "nameLocation": "77:8:18",
+        "nameLocation": "77:8:33",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "BlocTick.Ticket",
-            "id": 2693,
+            "id": 5166,
             "members": [
               {
                 "constant": false,
-                "id": 2683,
+                "id": 5156,
                 "mutability": "mutable",
                 "name": "name",
-                "nameLocation": "123:4:18",
+                "nameLocation": "123:4:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2693,
-                "src": "116:11:18",
+                "scope": 5166,
+                "src": "116:11:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -71,10 +71,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 2682,
+                  "id": 5155,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "116:6:18",
+                  "src": "116:6:33",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -84,13 +84,13 @@
               },
               {
                 "constant": false,
-                "id": 2685,
+                "id": 5158,
                 "mutability": "mutable",
                 "name": "description",
-                "nameLocation": "144:11:18",
+                "nameLocation": "144:11:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2693,
-                "src": "137:18:18",
+                "scope": 5166,
+                "src": "137:18:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -98,10 +98,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 2684,
+                  "id": 5157,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "137:6:18",
+                  "src": "137:6:33",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -111,33 +111,33 @@
               },
               {
                 "constant": false,
-                "id": 2688,
+                "id": 5161,
                 "mutability": "mutable",
                 "name": "ticket_type",
-                "nameLocation": "176:11:18",
+                "nameLocation": "176:11:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2693,
-                "src": "165:22:18",
+                "scope": 5166,
+                "src": "165:22:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_TicketType_$2719",
+                  "typeIdentifier": "t_enum$_TicketType_$5192",
                   "typeString": "enum BlocTick.TicketType"
                 },
                 "typeName": {
-                  "id": 2687,
+                  "id": 5160,
                   "nodeType": "UserDefinedTypeName",
                   "pathNode": {
-                    "id": 2686,
+                    "id": 5159,
                     "name": "TicketType",
                     "nodeType": "IdentifierPath",
-                    "referencedDeclaration": 2719,
-                    "src": "165:10:18"
+                    "referencedDeclaration": 5192,
+                    "src": "165:10:33"
                   },
-                  "referencedDeclaration": 2719,
-                  "src": "165:10:18",
+                  "referencedDeclaration": 5192,
+                  "src": "165:10:33",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_TicketType_$2719",
+                    "typeIdentifier": "t_enum$_TicketType_$5192",
                     "typeString": "enum BlocTick.TicketType"
                   }
                 },
@@ -145,13 +145,13 @@
               },
               {
                 "constant": false,
-                "id": 2690,
+                "id": 5163,
                 "mutability": "mutable",
                 "name": "quantity_available",
-                "nameLocation": "205:18:18",
+                "nameLocation": "205:18:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2693,
-                "src": "197:26:18",
+                "scope": 5166,
+                "src": "197:26:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -159,10 +159,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2689,
+                  "id": 5162,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "197:7:18",
+                  "src": "197:7:33",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -172,13 +172,13 @@
               },
               {
                 "constant": false,
-                "id": 2692,
+                "id": 5165,
                 "mutability": "mutable",
                 "name": "price",
-                "nameLocation": "241:5:18",
+                "nameLocation": "241:5:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2693,
-                "src": "233:13:18",
+                "scope": 5166,
+                "src": "233:13:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -186,10 +186,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2691,
+                  "id": 5164,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "233:7:18",
+                  "src": "233:7:33",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -199,25 +199,25 @@
               }
             ],
             "name": "Ticket",
-            "nameLocation": "99:6:18",
+            "nameLocation": "99:6:33",
             "nodeType": "StructDefinition",
-            "scope": 2720,
-            "src": "92:161:18",
+            "scope": 5193,
+            "src": "92:161:33",
             "visibility": "public"
           },
           {
             "canonicalName": "BlocTick.SuccessfulPurchase",
-            "id": 2704,
+            "id": 5177,
             "members": [
               {
                 "constant": false,
-                "id": 2695,
+                "id": 5168,
                 "mutability": "mutable",
                 "name": "purchaseId",
-                "nameLocation": "301:10:18",
+                "nameLocation": "301:10:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2704,
-                "src": "294:17:18",
+                "scope": 5177,
+                "src": "294:17:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -225,10 +225,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 2694,
+                  "id": 5167,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "294:6:18",
+                  "src": "294:6:33",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -238,13 +238,13 @@
               },
               {
                 "constant": false,
-                "id": 2697,
+                "id": 5170,
                 "mutability": "mutable",
                 "name": "buyer",
-                "nameLocation": "329:5:18",
+                "nameLocation": "329:5:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2704,
-                "src": "321:13:18",
+                "scope": 5177,
+                "src": "321:13:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -252,10 +252,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 2696,
+                  "id": 5169,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "321:7:18",
+                  "src": "321:7:33",
                   "stateMutability": "nonpayable",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
@@ -266,13 +266,13 @@
               },
               {
                 "constant": false,
-                "id": 2699,
+                "id": 5172,
                 "mutability": "mutable",
                 "name": "tokenId",
-                "nameLocation": "352:7:18",
+                "nameLocation": "352:7:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2704,
-                "src": "344:15:18",
+                "scope": 5177,
+                "src": "344:15:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -280,10 +280,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2698,
+                  "id": 5171,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "344:7:18",
+                  "src": "344:7:33",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -293,13 +293,13 @@
               },
               {
                 "constant": false,
-                "id": 2701,
+                "id": 5174,
                 "mutability": "mutable",
                 "name": "ticketId",
-                "nameLocation": "377:8:18",
+                "nameLocation": "377:8:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2704,
-                "src": "369:16:18",
+                "scope": 5177,
+                "src": "369:16:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -307,10 +307,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2700,
+                  "id": 5173,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "369:7:18",
+                  "src": "369:7:33",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -320,52 +320,52 @@
               },
               {
                 "constant": false,
-                "id": 2703,
+                "id": 5176,
                 "mutability": "mutable",
                 "name": "cost",
-                "nameLocation": "402:4:18",
+                "nameLocation": "403:4:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2704,
-                "src": "395:11:18",
+                "scope": 5177,
+                "src": "395:12:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2702,
-                  "name": "string",
+                  "id": 5175,
+                  "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "395:6:18",
+                  "src": "395:7:33",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
                   }
                 },
                 "visibility": "internal"
               }
             ],
             "name": "SuccessfulPurchase",
-            "nameLocation": "265:18:18",
+            "nameLocation": "265:18:33",
             "nodeType": "StructDefinition",
-            "scope": 2720,
-            "src": "258:155:18",
+            "scope": 5193,
+            "src": "258:156:33",
             "visibility": "public"
           },
           {
             "canonicalName": "BlocTick.TicketPurchase",
-            "id": 2715,
+            "id": 5188,
             "members": [
               {
                 "constant": false,
-                "id": 2706,
+                "id": 5179,
                 "mutability": "mutable",
                 "name": "purchaseId",
-                "nameLocation": "457:10:18",
+                "nameLocation": "458:10:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2715,
-                "src": "450:17:18",
+                "scope": 5188,
+                "src": "451:17:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -373,10 +373,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 2705,
+                  "id": 5178,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "450:6:18",
+                  "src": "451:6:33",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -386,13 +386,13 @@
               },
               {
                 "constant": false,
-                "id": 2708,
+                "id": 5181,
                 "mutability": "mutable",
                 "name": "ticketId",
-                "nameLocation": "485:8:18",
+                "nameLocation": "486:8:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2715,
-                "src": "477:16:18",
+                "scope": 5188,
+                "src": "478:16:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -400,10 +400,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2707,
+                  "id": 5180,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "477:7:18",
+                  "src": "478:7:33",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -413,13 +413,13 @@
               },
               {
                 "constant": false,
-                "id": 2710,
+                "id": 5183,
                 "mutability": "mutable",
                 "name": "tokenURI",
-                "nameLocation": "510:8:18",
+                "nameLocation": "511:8:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2715,
-                "src": "503:15:18",
+                "scope": 5188,
+                "src": "504:15:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -427,10 +427,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 2709,
+                  "id": 5182,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "503:6:18",
+                  "src": "504:6:33",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -440,13 +440,13 @@
               },
               {
                 "constant": false,
-                "id": 2712,
+                "id": 5185,
                 "mutability": "mutable",
                 "name": "buyer",
-                "nameLocation": "536:5:18",
+                "nameLocation": "537:5:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2715,
-                "src": "528:13:18",
+                "scope": 5188,
+                "src": "529:13:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -454,10 +454,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 2711,
+                  "id": 5184,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "528:7:18",
+                  "src": "529:7:33",
                   "stateMutability": "nonpayable",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
@@ -468,77 +468,77 @@
               },
               {
                 "constant": false,
-                "id": 2714,
+                "id": 5187,
                 "mutability": "mutable",
                 "name": "cost",
-                "nameLocation": "558:4:18",
+                "nameLocation": "560:4:33",
                 "nodeType": "VariableDeclaration",
-                "scope": 2715,
-                "src": "551:11:18",
+                "scope": 5188,
+                "src": "552:12:33",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2713,
-                  "name": "string",
+                  "id": 5186,
+                  "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "551:6:18",
+                  "src": "552:7:33",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
                   }
                 },
                 "visibility": "internal"
               }
             ],
             "name": "TicketPurchase",
-            "nameLocation": "425:14:18",
+            "nameLocation": "426:14:33",
             "nodeType": "StructDefinition",
-            "scope": 2720,
-            "src": "418:151:18",
+            "scope": 5193,
+            "src": "419:152:33",
             "visibility": "public"
           },
           {
             "canonicalName": "BlocTick.TicketType",
-            "id": 2719,
+            "id": 5192,
             "members": [
               {
-                "id": 2716,
+                "id": 5189,
                 "name": "Free",
-                "nameLocation": "600:4:18",
+                "nameLocation": "602:4:33",
                 "nodeType": "EnumValue",
-                "src": "600:4:18"
+                "src": "602:4:33"
               },
               {
-                "id": 2717,
+                "id": 5190,
                 "name": "Paid",
-                "nameLocation": "614:4:18",
+                "nameLocation": "616:4:33",
                 "nodeType": "EnumValue",
-                "src": "614:4:18"
+                "src": "616:4:33"
               },
               {
-                "id": 2718,
+                "id": 5191,
                 "name": "Donation",
-                "nameLocation": "628:8:18",
+                "nameLocation": "630:8:33",
                 "nodeType": "EnumValue",
-                "src": "628:8:18"
+                "src": "630:8:33"
               }
             ],
             "name": "TicketType",
-            "nameLocation": "579:10:18",
+            "nameLocation": "581:10:33",
             "nodeType": "EnumDefinition",
-            "src": "574:68:18"
+            "src": "576:68:33"
           }
         ],
-        "scope": 2721,
-        "src": "69:575:18",
+        "scope": 5194,
+        "src": "69:577:33",
         "usedErrors": []
       }
     ],
-    "src": "36:609:18"
+    "src": "36:611:33"
   },
   "compiler": {
     "name": "solc",
@@ -559,8 +559,7 @@
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-05-12T19:11:22.061Z",
-  "networkType": "ethereum",
+  "updatedAt": "2022-05-13T00:00:09.194Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

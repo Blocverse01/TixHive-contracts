@@ -34,15 +34,40 @@ library TicketManager {
     function stillAvailable(Manager storage manager, uint256 ticketId)
         internal
         view
+        returns (bool)
     {
-        require(
-            manager._tickets[ticketId].quantity_available > 0,
-            "TICKET_SOLD_OUT"
-        );
+        return manager._tickets[ticketId].quantity_available > 0;
     }
 
     function reduceQty(Manager storage manager, uint256 ticketId) internal {
         manager._tickets[ticketId].quantity_available -= 1;
+    }
+
+    function getCost(Manager storage manager, uint256 ticketId)
+        internal
+        view
+        returns (uint256)
+    {
+        return manager._tickets[ticketId].price;
+    }
+
+    function isPaid(Manager storage manager, uint256 ticketId)
+        internal
+        view
+        returns (bool)
+    {
+        return
+            manager._tickets[ticketId].ticket_type == BlocTick.TicketType.Paid;
+    }
+
+    function isDonation(Manager storage manager, uint256 ticketId)
+        internal
+        view
+        returns (bool)
+    {
+        return
+            manager._tickets[ticketId].ticket_type ==
+            BlocTick.TicketType.Donation;
     }
 
     function getTotalCost(

@@ -1,3 +1,5 @@
 node_modules
 .env
 *.log
+*.deps
+backend/contracts/artifacts/

@@ -14,14 +14,14 @@ library BlocTick {
         address buyer;
         uint256 tokenId;
         uint256 ticketId;
-        string cost;
+        uint256 cost;
     }
     struct TicketPurchase {
         string purchaseId;
         uint256 ticketId;
         string tokenURI;
         address buyer;
-        string cost;
+        uint256 cost;
     }
     enum TicketType {
         Free,

@@ -91,14 +91,14 @@ contract("EventFactory", ([contractOwner, secondAddress, thirdAddress]) => {
           ticketId: 0,
           tokenURI: "https://ipfs.moralis.io:2053/ipfs/QmSCPLQbw54vZUpPcVu3VpeZJjXqpHAVQatQq4JwtUt4P2",
           buyer: thirdAddress,
-          cost: "5.0 ETH",
+          cost: ethers.utils.parseEther("5.0"),
         },
         {
           purchaseId: "VIPXXXdaregfff",
           ticketId: 1,
           tokenURI: "https://ipfs.moralis.io:2053/ipfs/QmSCPLQbw54vZUpPcVu3VpeZJjXqpHAVQatQq4JwtUt4P2",
           buyer: thirdAddress,
-          cost: "5.0 ETH",
+          cost: ethers.utils.parseEther("5.0"),
         },
       ];
       await eventFactory.mintTickets(eventContract.address, purchases, {
