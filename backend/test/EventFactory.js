@@ -61,6 +61,9 @@ contract("EventFactory", ([contractOwner, secondAddress, thirdAddress]) => {
       console.log(eventAddress);
       assert.isDefined(eventAddress);
     });
+  });
+
+  describe("event-management", () => {
     it("event creator can close sale", async () => {
       await eventContract.setSaleIsActive(false, { from: secondAddress });
       const saleIsActive = await eventContract.saleIsActive();
@@ -77,7 +80,7 @@ contract("EventFactory", ([contractOwner, secondAddress, thirdAddress]) => {
     it("only event creator can close sale", async () => {
       await eventContract.setSaleIsActive(false, { from: thirdAddress }).should.be.rejected;
     });
-  });
+  })
 
   describe("tickets", () => {
     // check if tickets gets minted, check if mintTickets works
@@ -91,19 +94,19 @@ contract("EventFactory", ([contractOwner, secondAddress, thirdAddress]) => {
           ticketId: 0,
           tokenURI: "https://ipfs.moralis.io:2053/ipfs/QmSCPLQbw54vZUpPcVu3VpeZJjXqpHAVQatQq4JwtUt4P2",
           buyer: thirdAddress,
-          cost: ethers.utils.parseEther("5.0"),
+          cost: ethers.utils.parseEther("5"),
         },
         {
           purchaseId: "VIPXXXdaregfff",
           ticketId: 1,
           tokenURI: "https://ipfs.moralis.io:2053/ipfs/QmSCPLQbw54vZUpPcVu3VpeZJjXqpHAVQatQq4JwtUt4P2",
           buyer: thirdAddress,
-          cost: ethers.utils.parseEther("5.0"),
+          cost: ethers.utils.parseEther("5"),
         },
       ];
       await eventFactory.mintTickets(eventContract.address, purchases, {
         from: thirdAddress,
-        value: ethers.utils.parseEther("10.0"),
+        value: ethers.utils.parseEther("10"),
       });
       // `from` helps us identify by any address in the test
 

@@ -12,6 +12,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721Enumer
 import "./EventFactory.sol";
 
 contract Event is
+    Initializable,
     ERC721URIStorageUpgradeable,
     OwnableUpgradeable,
     ERC721EnumerableUpgradeable
@@ -20,10 +21,10 @@ contract Event is
     using TicketManager for TicketManager.Manager;
     Counters.Counter private tokenCounter;
     TicketManager.Manager private ticketManager;
-    uint256 internal constant PERCENTS_DIVIDER = 1000;
+    uint256 internal PERCENTS_DIVIDER;
 
     address public _owner;
-    bool public saleIsActive = true;
+    bool public saleIsActive;
     uint256 private totalSold;
     address private _factory;
 
@@ -38,13 +39,15 @@ contract Event is
     }
 
     function initialize(
-        string memory name,
-        string memory symbol,
+        string memory _name,
+        string memory _symbol,
         address __owner
     ) public initializer {
+        __ERC721_init(_name, _symbol);
         _factory = msg.sender;
         _owner = __owner;
-        __ERC721_init(name, symbol);
+        PERCENTS_DIVIDER = 1000;
+        saleIsActive = true;
         __Ownable_init();
         transferOwnership(__owner);
     }
