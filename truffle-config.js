@@ -118,10 +118,6 @@ module.exports = {
   api_keys: {
     etherscan: process.env.ETHERSCAN_API_KEY,
   },
-  contracts_directory: "./backend/contracts/",
-  contracts_build_directory: "./backend/abis/",
-  migrations_directory: "./backend/migrations/",
-  test_directory: "./backend/test/",
   compilers: {
     solc: {
       version: "0.8.13",

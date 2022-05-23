@@ -3,6 +3,7 @@ pragma solidity >=0.6.0 <0.9.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721RoyaltyUpgradeable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./TicketManager.sol";
 import "./BlocTick.sol";
@@ -15,17 +16,19 @@ contract Event is
     Initializable,
     ERC721URIStorageUpgradeable,
     OwnableUpgradeable,
-    ERC721EnumerableUpgradeable
+    ERC721EnumerableUpgradeable,
+    ERC721RoyaltyUpgradeable
 {
     using Counters for Counters.Counter;
     using TicketManager for TicketManager.Manager;
     Counters.Counter private tokenCounter;
     TicketManager.Manager private ticketManager;
-    uint256 internal PERCENTS_DIVIDER;
 
+    uint256 internal PERCENTS_DIVIDER;
     address public _owner;
     bool public saleIsActive;
     uint256 private totalSold;
+    int256 paymentMethod;
     address private _factory;
 
     modifier onlyFactory() {
@@ -38,15 +41,32 @@ contract Event is
         _;
     }
 
+    function isApprovedForAll(address __owner, address _operator)
+        public
+        view
+        override(ERC721Upgradeable, IERC721Upgradeable)
+        returns (bool isOperator)
+    {
+        // if OpenSea's ERC721 Proxy Address is detected, auto-return true
+        if (_operator == address(0x58807baD0B376efc12F5AD86aAc70E78ed67deaE)) {
+            return true;
+        }
+
+        // otherwise, use the default ERC721.isApprovedForAll()
+        return ERC721Upgradeable.isApprovedForAll(__owner, _operator);
+    }
+
     function initialize(
         string memory _name,
         string memory _symbol,
-        address __owner
+        address __owner,
+        uint256 _paymentMethod
     ) public initializer {
         __ERC721_init(_name, _symbol);
         _factory = msg.sender;
         _owner = __owner;
         PERCENTS_DIVIDER = 1000;
+        paymentMethod = _paymentMethod >= 0 ? int256(_paymentMethod) : -1;
         saleIsActive = true;
         __Ownable_init();
         transferOwnership(__owner);
@@ -85,9 +105,13 @@ contract Event is
                 shouldPay = true;
             }
             if (shouldPay) {
-                payable(_owner).transfer(creator_fee);
+                factory.handlePayment(_owner, paymentMethod, creator_fee);
                 totalSold += creator_fee;
-                payable(factory.owner()).transfer(platform_fee);
+                factory.handlePayment(
+                    factory.owner(),
+                    paymentMethod,
+                    platform_fee
+                );
                 feesEarned += platform_fee;
             }
             _mint(purchase.buyer, _tokenId);
@@ -120,7 +144,11 @@ contract Event is
 
     function _burn(uint256 tokenId)
         internal
-        override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
+        override(
+            ERC721Upgradeable,
+            ERC721URIStorageUpgradeable,
+            ERC721RoyaltyUpgradeable
+        )
     {
         super._burn(tokenId);
     }
@@ -137,7 +165,11 @@ contract Event is
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
+        override(
+            ERC721Upgradeable,
+            ERC721EnumerableUpgradeable,
+            ERC721RoyaltyUpgradeable
+        )
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
