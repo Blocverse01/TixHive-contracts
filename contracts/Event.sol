@@ -24,11 +24,10 @@ contract Event is
     Counters.Counter private tokenCounter;
     TicketManager.Manager private ticketManager;
 
-    uint256 internal PERCENTS_DIVIDER;
     address public _owner;
     bool public saleIsActive;
     uint256 private totalSold;
-    int256 paymentMethod;
+    int256 public paymentMethod;
     address private _factory;
 
     modifier onlyFactory() {
@@ -60,33 +59,52 @@ contract Event is
         string memory _name,
         string memory _symbol,
         address __owner,
-        uint256 _paymentMethod
+        int256 _paymentMethod
     ) public initializer {
         __ERC721_init(_name, _symbol);
         _factory = msg.sender;
         _owner = __owner;
-        PERCENTS_DIVIDER = 1000;
-        paymentMethod = _paymentMethod >= 0 ? int256(_paymentMethod) : -1;
+        paymentMethod = _paymentMethod >= 0 ? _paymentMethod : -1;
         saleIsActive = true;
         __Ownable_init();
         transferOwnership(__owner);
+        _setDefaultRoyalty(__owner, 1000);
     }
 
-    function purchaseTickets(BlocTick.TicketPurchase[] memory purchases)
+    function mintTicket(
+        BlocTick.TicketPurchase memory purchase,
+        uint256 creator_fee
+    ) public onlyFactory {
+        uint256 _tokenId = tokenCounter.current();
+        _mint(purchase.buyer, _tokenId);
+        ticketManager.reduceQty(purchase.ticketId);
+        tokenCounter.increment();
+        _setTokenURI(_tokenId, purchase.tokenURI);
+        ticketManager._sales.push(
+            BlocTick.SuccessfulPurchase(
+                purchase.buyer,
+                _tokenId,
+                purchase.ticketId,
+                purchase.cost
+            )
+        );
+        totalSold += creator_fee;
+    }
+
+    /* function purchaseTickets(BlocTick.TicketPurchase[] memory purchases)
         external
         payable
         onlyFactory
         returns (uint256)
     {
-        require(saleIsActive);
         uint256 totalCost = ticketManager.getTotalCost(purchases);
         EventFactory factory = EventFactory(_factory);
-        uint256 feesEarned = 0;
+        address factoryDeployer = factory.owner();
+        uint256 feesEarned;
         require(msg.value >= totalCost, "ERR_INSUFFICIENT_FUNDS");
         for (uint256 i = 0; i < purchases.length; ) {
             BlocTick.TicketPurchase memory purchase = purchases[i];
             if (!ticketManager.stillAvailable(purchase.ticketId)) continue;
-            uint256 _tokenId = tokenCounter.current();
             uint256 ticketCost = ticketManager.getCost(purchase.ticketId);
             uint256 platform_fee = (factory.platform_percent() * ticketCost) /
                 PERCENTS_DIVIDER;
@@ -105,34 +123,30 @@ contract Event is
                 shouldPay = true;
             }
             if (shouldPay) {
-                factory.handlePayment(_owner, paymentMethod, creator_fee);
-                totalSold += creator_fee;
-                factory.handlePayment(
-                    factory.owner(),
-                    paymentMethod,
-                    platform_fee
-                );
+                if (paymentMethod >= 0) {
+                    factory.handlePayment(
+                        _owner,
+                        uint256(paymentMethod),
+                        creator_fee
+                    );
+                    factory.handlePayment(
+                        factory.owner(),
+                        uint256(paymentMethod),
+                        platform_fee
+                    );
+                } else {
+                    payable(_owner).transfer(creator_fee);
+                    payable(factoryDeployer).transfer(platform_fee);
+                }
                 feesEarned += platform_fee;
             }
-            _mint(purchase.buyer, _tokenId);
-            ticketManager.reduceQty(purchase.ticketId);
-            tokenCounter.increment();
-            _setTokenURI(_tokenId, purchase.tokenURI);
-            ticketManager._sales.push(
-                BlocTick.SuccessfulPurchase(
-                    purchase.purchaseId,
-                    purchase.buyer,
-                    _tokenId,
-                    purchase.ticketId,
-                    purchase.cost
-                )
-            );
+
             unchecked {
                 i++;
             }
         }
         return feesEarned;
-    }
+    } */
 
     function _beforeTokenTransfer(
         address from,
@@ -180,11 +194,11 @@ contract Event is
         view
         returns (
             uint256,
-            BlocTick.SuccessfulPurchase[] memory,
-            BlocTick.Ticket[] memory
+            BlocTick.Ticket[] memory,
+            BlocTick.SuccessfulPurchase[] memory
         )
     {
-        return (totalSold, ticketManager._sales, ticketManager._tickets);
+        return (totalSold, ticketManager._tickets, ticketManager._sales);
     }
 
     function storeTickets(BlocTick.Ticket[] memory tickets, address caller)
