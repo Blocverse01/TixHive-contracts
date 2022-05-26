@@ -13,5 +13,7 @@ module.exports = async (deployer, network) => {
   if (network === "development" || network.includes("testnet")) {
     await deployer.deploy(TestERC20Token, web3.utils.toWei("100000000"));
     EventFactory.deployed().then((instance) => instance.addERC20PaymentMethod(TestERC20Token.address, "TEST"));
+    return;
   }
+  EventFactory.deployed().then((instance) => instance.addERC20PaymentMethod("0xc2132D05D31c914a87C6611C10748AEb04B58e8F", "USDT"));
 };

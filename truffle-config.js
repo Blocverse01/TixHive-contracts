@@ -84,7 +84,7 @@ module.exports = {
     },
 
     matic_mainnet: {
-      provider: () => new HDWalletProvider(privateKeys.split(","), "https://matic-mainnet.chainstacklabs.com"),
+      provider: () => new HDWalletProvider(privateKeys.split(","), "https://rpc-mainnet.matic.network"),
       network_id: 137,
       confirmations: 2,
       timeoutBlocks: 50,
