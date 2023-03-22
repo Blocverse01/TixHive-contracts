@@ -107,12 +107,42 @@ module.exports = {
       timeoutBlocks: 50,
       skipDryRun: true,
     },
+    polygon_zkEVM: {
+      provider: () => new HDWalletProvider(privateKeys.split(","), `https://rpc.public.zkevm-test.net`),
+      network_id: 1442,
+      confirmations: 2,
+      timeoutBlocks: 50,
+      skipDryRun: true,
+    },
     development: {
       host: "127.0.0.1",
       port: 9545,
       network_id: "*", // Match any network id
       websockets: true,
     },
+
+    gnosis: {
+      provider: function() {
+            return new HDWalletProvider(
+           process.env.MNEMONIC,
+           "https://rpc.gnosischain.com")
+      },
+      network_id: 100,
+      gas: 500000,
+      gasPrice: 1000000000
+},
+chiado: {
+      provider: function() {
+            return new HDWalletProvider(
+           process.env.MNEMONIC,
+           "https://rpc.chiadochain.net")
+      },
+      network_id: 10200,
+      gas: 500000,
+      gasPrice: 1000000000
+},
+
+
   },
   plugins: ["truffle-plugin-verify", "truffle-contract-size"],
   api_keys: {
