@@ -114,6 +114,13 @@ module.exports = {
       timeoutBlocks: 50,
       skipDryRun: true,
     },
+    scroll_testnet: {
+      provider: () => new HDWalletProvider(privateKeys.split(","), `https://alpha-rpc.scroll.io/l2`),
+      network_id: 534353,
+      confirmations: 2,
+      timeoutBlocks: 50,
+      skipDryRun: true,
+    },
     development: {
       host: "127.0.0.1",
       port: 9545,
