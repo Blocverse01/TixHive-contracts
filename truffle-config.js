@@ -121,6 +121,13 @@ module.exports = {
       timeoutBlocks: 50,
       skipDryRun: true,
     },
+    linea_testnet: {
+      provider: () => new HDWalletProvider(privateKeys.split(","), `https://rpc.goerli.linea.build/`),
+      network_id: 59140,
+      confirmations: 2,
+      timeoutBlocks: 50,
+      skipDryRun: true,
+    },
     development: {
       host: "127.0.0.1",
       port: 9545,
